@@ -60,7 +60,7 @@ const Inicio = () => {
 
     return (
         <>
-            <h1 className='font-black text-4xl text-orange-900'>Despachos</h1>
+            <h1 className='font-extrabold text-4xl text-orange-900'>Despachos</h1>
             <p className='mt-3'>Administra tus Despachos</p>
 
             <table className='w-full mt-5 table-auto shadow bg-white '>

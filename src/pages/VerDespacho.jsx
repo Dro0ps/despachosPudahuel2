@@ -3,6 +3,10 @@ import { useParams } from "react-router-dom";
 import Spinner from "../components/Spinner";
 import { getFirestore, getDoc, doc } from "firebase/firestore";
 import firebaseApp from "../firebase/credenciales";
+import moment from "moment";
+
+moment.locale("es");
+
 
 const db = getFirestore(firebaseApp);
 
@@ -54,6 +58,13 @@ const VerDespacho = () => {
                     {despacho.nombre}
                     </p> */}
 
+
+                    {despacho.creado && 
+                    <p className="text-2xl mt-4 text-gray-600">
+                        <span className="text-gray-800 uppercase font-bold">Creado el: </span>
+                        {`${moment(despacho.creado).format('LL')} ${moment(despacho.creado).format('LTS')}`}
+                    </p>
+                    }
 
                     {despacho.direccion && 
                     <p className="text-2xl mt-4 text-gray-600">

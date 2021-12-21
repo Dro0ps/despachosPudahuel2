@@ -95,6 +95,12 @@ const Formulario = ({despacho, cargando}) => {
 
             <Formik
                 initialValues={{
+                    creado: +new Date(),
+                    recibido: despacho?.recibido ?? false,
+                    despachado: despacho?.despachado ?? false,
+                    confirmado: despacho?.confirmado ?? false,
+                    fecha_despachado: despacho?.fecha_despachado ?? '',
+                    fecha_confirmado: despacho?.fecha_confirmado ?? '',
                     nombre: despacho?.nombre ?? '',
                     direccion: despacho?.direccion ?? '',
                     documento: despacho?.documento ?? '',
