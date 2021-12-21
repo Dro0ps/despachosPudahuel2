@@ -6,12 +6,10 @@ import { useNavigate } from 'react-router-dom'; // para redireccionar
 import Spinner from './Spinner';
 import firebaseApp from '../firebase/credenciales';
 import { getFirestore, updateDoc, addDoc, collection} from 'firebase/firestore';
-
-
+import { getStorage, ref, uploadBytes, getDownloadURL} from 'firebase/storage';
 
 const db = getFirestore(firebaseApp);
-
-
+const storage = getStorage(firebaseApp);
 
 const Formulario = ({despacho, cargando}) => {
 
@@ -25,8 +23,29 @@ const Formulario = ({despacho, cargando}) => {
         notas: Yup.string().required('Debe Agregar una nota o intrucciones del Despacho')
     })
 
+    //////// MANEJO DE ARCHIVOS //////
+    let urlDescarga; 
+    let archivoLocal 
+
+    const fileHandler = async e => {
+        // detectar archivo
+        archivoLocal = e.target.files[0];
+        // cargarlo a firebase storage
+        /* const archivoRef = ref(storage, `archivos/${archivoLocal.name}`);
+        await uploadBytes(archivoRef, archivoLocal);
+        // obtener url de descarga
+        urlDescarga = await getDownloadURL(archivoRef);
+
+        console.log(urlDescarga)
+ */
+    }
+
     const handleSubmit = async (valores) => {
+
+       
         try {
+
+            console.log(valores);
             
             if(despacho.id) {
 
@@ -40,6 +59,15 @@ const Formulario = ({despacho, cargando}) => {
 
             } else {
                 try {
+                    // cargar archivo a firebase storage
+                    const archivoRef = ref(storage, `archivos/${archivoLocal.name}`);
+                    await uploadBytes(archivoRef, archivoLocal);
+
+                    // obtener url de descarga
+                    urlDescarga = await getDownloadURL(archivoRef);
+
+                    console.log(urlDescarga)
+                    valores.archivo = urlDescarga;
                     console.log(valores)
                     await addDoc(collection(db, "despachos"), valores);
 
@@ -70,7 +98,8 @@ const Formulario = ({despacho, cargando}) => {
                     nombre: despacho?.nombre ?? '',
                     direccion: despacho?.direccion ?? '',
                     documento: despacho?.documento ?? '',
-                    notas: despacho?.notas ?? ''
+                    notas: despacho?.notas ?? '',
+                    archivo: urlDescarga
                 }}
                 enableReinitialize={true} // props muy util para formulario en conjunto con defaultProps
                 onSubmit={ async (values, {resetForm}) => {
@@ -155,6 +184,19 @@ const Formulario = ({despacho, cargando}) => {
                             (<Alerta>{errors.notas}</Alerta> )
                             : null
                         }
+                    </div>
+
+                    <div className='mb-4'>
+                    <input 
+                        type="file"
+                        onChange={fileHandler}
+                        className="block w-full text-sm text-gray-500
+                        file:mr-4 file:py-2 file:px-4
+                        file:rounded-full file:border-0
+                        file:text-sm file:font-semibold
+                        file:bg-violet-50 file:text-orange-700
+                        hover:file:bg-violet-100"
+                    />
                     </div>
 
                     <input

@@ -75,6 +75,12 @@ const VerDespacho = () => {
                         {despacho.notas}
                     </p> }
 
+                    {despacho.archivo &&
+                    <p className="text-2xl mt-4 text-gray-600">
+                        <span className="text-gray-800 uppercase font-bold">Archivo: </span>
+                        <a href={despacho.archivo} target="_blank">Abrir Adjunto</a>
+                    </p> }
+
                 </>
 
                 :
