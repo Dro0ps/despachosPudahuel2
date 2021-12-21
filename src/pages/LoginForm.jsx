@@ -30,10 +30,6 @@ const LoginForm = () => {
             [e.target.name] : e.target.value
         })
     }
-    
-
-    console.log(user)
-
 
     async function submitHandler(e){
         e.preventDefault();
