@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import Despacho from '../components/Despacho';
+import { collection, query, getDocs, getFirestore, doc, deleteDoc } from "firebase/firestore";
+import firebaseApp from '../firebase/credenciales';
 
 
+
+const db = getFirestore(firebaseApp);
 
 const Inicio = () => {
 
@@ -10,31 +14,36 @@ const Inicio = () => {
     useEffect(() => {
         const obtenerDespachosApi = async () => {
             try {
-                const url = 'http://localhost:4000/despachos'
-                const respuesta = await fetch(url)
-                const resultado = await respuesta.json()
+                //Como llamar documentos y listarlos en Firebase IMPORTANTE
+                const q = query(collection(db,"despachos"));
+                const querySnapshot = await getDocs(q);
+                
+                const resultado = [];
 
-                setDespachos(resultado)
+                querySnapshot.forEach((doc) => {
+                    /* console.log(doc.id, "=>", doc.data()); */
+                    resultado.push({
+                        id: doc.id,
+                        ...doc.data()
+                    })
+                    
+                })
+
+                setDespachos(resultado);
 
             } catch (error) {
                 console.log(error)
             }
         }
-
         obtenerDespachosApi();
-        
     }, [])
 
     const handleEliminar = async id => {
         const confirmar = confirm('¿Deseas eliminar este cliente?')
-        const url = `http://localhost:4000/despachos/${id}`
 
         if(confirmar) {
             try {
-                const respuesta = await fetch(url, {
-                    method: 'DELETE'
-                })
-                await respuesta.json()
+                await deleteDoc(doc(db, `despachos/${id}`))
 
                 // Elimina del state el despacho eliminado de la api y lo actualiza
                 // llama todos los despachos que sean diferentes al id seleccionado para eliminarlo del state

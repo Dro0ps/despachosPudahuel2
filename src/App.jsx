@@ -11,6 +11,8 @@ import NuevoDespacho from './pages/NuevoDespacho';
 
 
 function App() {
+
+  /* console.log(import.meta.env); */
  
 
   return (

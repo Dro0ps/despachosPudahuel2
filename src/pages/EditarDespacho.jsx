@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Formulario from '../components/Formulario'
+import { getFirestore, getDoc, doc } from "firebase/firestore";
+import firebaseApp from "../firebase/credenciales";
+
+
+
+const db = getFirestore(firebaseApp);
 
 const EditarDespacho = () => {
 
@@ -9,19 +15,20 @@ const EditarDespacho = () => {
     const [cargando, setCargando] = useState(true);
 
     //Lee el id que tengamos en la url: hooks useParams
-    const {id} = useParams();
-    
-    const url = `http://localhost:4000/despachos/${id}`
+    const {id: enlaceID} = useParams();
     
     useEffect(() => {
         setCargando(!cargando)
         const obtenerClienteAPI = async () => {
             try {
+
+                const ref = doc(db, `despachos/${enlaceID}`);
+
+                const consulta = await getDoc(ref);
+
+                const respuesta = consulta.data();
                 
-                const respuesta = await fetch(url)
-                const resultado = await respuesta.json()
-                
-                 await setDespacho(resultado);
+                setDespacho(respuesta);
                  
             } catch (error) {
                 console.log(error)

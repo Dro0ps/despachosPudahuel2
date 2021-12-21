@@ -4,6 +4,12 @@ import * as Yup from 'yup';
 import Alerta from './Alerta';
 import { useNavigate } from 'react-router-dom'; // para redireccionar
 import Spinner from './Spinner';
+import firebaseApp from '../firebase/credenciales';
+import { getFirestore, updateDoc, addDoc, collection} from 'firebase/firestore';
+
+
+
+const db = getFirestore(firebaseApp);
 
 
 
@@ -21,34 +27,27 @@ const Formulario = ({despacho, cargando}) => {
 
     const handleSubmit = async (valores) => {
         try {
-
-            let respuesta;
-
+            
             if(despacho.id) {
-                const url = `http://localhost:4000/despachos/${despacho.id}`
 
-                respuesta = await fetch(url, {
-                    method: 'PUT',
-                    body: JSON.stringify(valores),
-                    headers: {
-                        'Content-Type' : 'application/json'
-                    }
-                })
+                try {
+                    const docRef  = await updateDoc(collection(db, `despachos/${id}`), valores);
+                    console.log(docRef);
+                    
+                } catch (error) {
+                    console.log(error);
+                }
 
             } else {
-                const url = 'http://localhost:4000/despachos'
+                try {
+                    console.log(valores)
+                    await addDoc(collection(db, "despachos"), valores);
 
-                respuesta = await fetch(url, {
-                    method: 'POST',
-                    body: JSON.stringify(valores),
-                    headers: {
-                        'Content-Type' : 'application/json'
-                    }
-                })
+                } catch (error) {
+                    console.log(error);
+                }
                 
             }
-
-                await respuesta.json()
                 navigate('/despachos')//Redirecciona al usuario a otra ventana
 
         } catch (error) {

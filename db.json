@@ -48,6 +48,20 @@
       "documento": 123,
       "notas": "123",
       "id": 9
+    },
+    {
+      "nombre": "Darnel Montero",
+      "direccion": "Eleuterio Ramirez 1488",
+      "documento": 123,
+      "notas": "Hola mundo\n",
+      "id": 10
+    },
+    {
+      "nombre": "Darnel Montero",
+      "direccion": "Eleuterio Ramirez 1488, Santiago",
+      "documento": 51245,
+      "notas": "hola\n",
+      "id": 11
     }
   ]
 }
