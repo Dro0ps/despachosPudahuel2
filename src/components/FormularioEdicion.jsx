@@ -38,7 +38,7 @@ const FormularioEdicion = ({despacho, cargando}) => {
 
         console.log(urlDescarga)
  */
-        console.log(archivoLocal)
+        
     }
 
    console.log(archivoLocal)
@@ -59,7 +59,7 @@ const FormularioEdicion = ({despacho, cargando}) => {
                 
                 // Se asigna la dirección del archivo a la constante archivo
                 valores.archivo = urlDescarga;
-                console.log(valores.archivo)
+                
 
                 await updateDoc(doc(db, `despachos/${enlaceID}`), valores);
 
