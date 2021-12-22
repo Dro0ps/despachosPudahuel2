@@ -22,16 +22,16 @@ function App() {
 
   /* console.log(import.meta.env); */
 
-  const [usuarioGlobal, setUsuarioGlobal] = useState(null);
+  const [usuarioGlobal, setUsuarioGlobal] = useState(true);
 
   useEffect(() => {
     onAuthStateChanged(auth,(usuarioFirebase) => {
       if (usuarioFirebase) {
           // Codígo en caso de que haya sesión iniciada
-          setUsuarioGlobal(usuarioFirebase);
+          setUsuarioGlobal(false);
       } else {
           // Codígo en caso de que no haya sesión iniciada
-          setUsuarioGlobal(null);
+          setUsuarioGlobal(true);
       }
   })
     
@@ -43,24 +43,18 @@ function App() {
   return (
     <>
       <BrowserRouter>
-
         <Routes>
-          { !usuarioGlobal ? 
+          { usuarioGlobal ? 
+          <>
+              <Route path="/" element={<IniciarSesion/>}>
+                <Route index element={<LoginForm/>}/>
+              </Route>
 
-          /*  */
-
-            <>
-            
-            <Route
-              path='/*'
-              element={<Navigate replace to='/'/>}
-            />
-
-            <Route path="/" element={<IniciarSesion/>}>
-            <Route index element={<LoginForm/>}/>
-            </Route>
+              <Route
+                path='/*'
+                element={<Navigate replace to='/'/>}
+              />
             </>
-            
             :
             <>
 
@@ -69,13 +63,12 @@ function App() {
               element={<Navigate replace to='/despachos'/>}
             />
             
-            
             <Route path="/despachos" element={<Layout/>}>
-            <Route index element={<Inicio/>}/>
-            <Route path="nuevo" element={<NuevoDespacho/>}/>
-            <Route path="editar/:id" element={<EditarDespacho/>}/>
-            <Route path=":id" element={<VerDespacho/>}/>
-          </Route>
+              <Route index element={<Inicio/>}/>
+              <Route path="nuevo" element={<NuevoDespacho/>}/>
+              <Route path="editar/:id" element={<EditarDespacho/>}/>
+              <Route path=":id" element={<VerDespacho/>}/>
+            </Route>
 
           </>
 

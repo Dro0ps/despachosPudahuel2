@@ -4,6 +4,12 @@ import Spinner from "../components/Spinner";
 import { getFirestore, getDoc, doc } from "firebase/firestore";
 import firebaseApp from "../firebase/credenciales";
 import moment from "moment";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCoffee, faFileDownload } from "@fortawesome/free-solid-svg-icons";
+
+
+
+
 
 moment.locale("es");
 
@@ -49,7 +55,7 @@ const VerDespacho = () => {
             
                 { despacho ?
                 <>
-                <h1 className='font-black text-4xl text-orange-900'>{despacho.nombre}</h1>
+                <h1 className='font-black text-4xl mt-8 text-orange-900'>{despacho.nombre}</h1>
                 <p className='mt-3'>Detalles de la Orden </p>
 
 
@@ -87,10 +93,14 @@ const VerDespacho = () => {
                     </p> }
 
                     {despacho.archivo &&
-                    <p className="text-2xl mt-4 text-gray-600">
-                        <span className="text-gray-800 uppercase font-bold">Archivo: </span>
-                        <a href={despacho.archivo} target="_blank">Abrir Adjunto</a>
+                    <p className="text-1xl mt-8 text-gray-600">
+                        <a href={despacho.archivo} className="text-2xl text-orange-800" target="_blank">
+                            <FontAwesomeIcon icon={faFileDownload} />Descargar Adjunto
+                        </a>
                     </p> }
+
+                    
+                    
 
                 </>
 

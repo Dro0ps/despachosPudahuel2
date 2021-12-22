@@ -1,4 +1,3 @@
-import React from 'react'
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import Alerta from './Alerta';
@@ -11,8 +10,7 @@ import { getStorage, ref, uploadBytes, getDownloadURL} from 'firebase/storage';
 const db = getFirestore(firebaseApp);
 const storage = getStorage(firebaseApp);
 
-const Formulario = ({despacho, cargando}) => {
-
+const FormularioEdicion = ({despacho, cargando}) => {
     const navigate = useNavigate();
     const {id: enlaceID} = useParams();
 
@@ -32,12 +30,21 @@ const Formulario = ({despacho, cargando}) => {
     const fileHandler = async e => {
         // detectar archivo
         archivoLocal = e.target.files[0];
+        // cargarlo a firebase storage
+        /* const archivoRef = ref(storage, `archivos/${archivoLocal.name}`);
+        await uploadBytes(archivoRef, archivoLocal);
+        // obtener url de descarga
+        urlDescarga = await getDownloadURL(archivoRef);
+
+        console.log(urlDescarga)
+ */
+        console.log(archivoLocal)
     }
 
-    const handleSubmit = async (valores) => {
+   console.log(archivoLocal)
 
+    const handleSubmit = async (valores) => {
         try {
-                console.log(archivoLocal);
 
             if(archivoLocal) {
 
@@ -52,22 +59,28 @@ const Formulario = ({despacho, cargando}) => {
                 
                 // Se asigna la dirección del archivo a la constante archivo
                 valores.archivo = urlDescarga;
+                console.log(valores.archivo)
 
-                
-                await addDoc(collection(db, "despachos"), valores);
+                await updateDoc(doc(db, `despachos/${enlaceID}`), valores);
 
-            } else {
-                await addDoc(collection(db, "despachos"), valores);
-                
             }
 
-            navigate('/despachos')//Redirecciona al usuario a otra ventana
-
+            await updateDoc(doc(db, `despachos/${enlaceID}`), valores);
+            
+            
         } catch (error) {
             console.log(error);
         }
 
-    }
+        navigate('/despachos')//Redirecciona al usuario a otra ventana
+    } 
+
+                
+            
+                
+
+        
+    
 
     console.log(cargando);
 
@@ -208,10 +221,10 @@ const Formulario = ({despacho, cargando}) => {
     )
 }
 
-// Se agregan props por defecto en caso de no recibir ningun despacho
+/* // Se agregan props por defecto en caso de no recibir ningun despacho
 Formulario.defaultProps = {
     despacho: {},
     cargando: false
-}
+} */
 
-export default Formulario
+export default FormularioEdicion

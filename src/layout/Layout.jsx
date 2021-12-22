@@ -2,6 +2,7 @@ import { getAuth, signOut } from "firebase/auth";
 import { Outlet, Link, useLocation } from "react-router-dom"
 import db from '../firebase/credenciales'
 
+
 const auth = getAuth(db);
 
 
@@ -9,6 +10,12 @@ const Layout = () => {
 
     const location = useLocation();
     const urlActual = location.pathname;
+
+
+    const cerrarSesion = () => {
+        signOut(auth)
+    }
+
     
     return (
         <div className="md:flex md:min-h-screen">
@@ -35,17 +42,12 @@ const Layout = () => {
 
 
             </div>
+  
+            <button 
+                className='text-1xl font-extrabold text-center text-white hover:text-orange-300 transition-colors' 
+                onClick={cerrarSesion}>Cerrar Sesión
+            </button>
                 
-
-                <button 
-                    className='text-1xl font-extrabold text-center text-white hover:text-orange-300 transition-colors' 
-                    onClick={() => signOut(auth)}
-                >Cerrar sesión</button>
-                    
-
-                
-                    
-
                 
             </div>
 
