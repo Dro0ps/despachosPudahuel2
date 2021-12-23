@@ -1,12 +1,12 @@
-import React from 'react'
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import Alerta from './Alerta';
-import { useNavigate, useParams } from 'react-router-dom'; // para redireccionar
+import { useNavigate } from 'react-router-dom'; // para redireccionar
 import Spinner from './Spinner';
 import firebaseApp from '../firebase/credenciales';
-import { getFirestore, updateDoc, addDoc, doc, collection} from 'firebase/firestore';
+import { getFirestore, addDoc, collection} from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL} from 'firebase/storage';
+
 
 const db = getFirestore(firebaseApp);
 const storage = getStorage(firebaseApp);
@@ -14,7 +14,7 @@ const storage = getStorage(firebaseApp);
 const Formulario = ({despacho, cargando}) => {
 
     const navigate = useNavigate();
-    const {id: enlaceID} = useParams();
+    
 
     // Definimos la forma que tendran los datos recibidos por el formulario con yup y shape
     const nuevoClienteSchema = Yup.object().shape({
@@ -48,24 +48,22 @@ const Formulario = ({despacho, cargando}) => {
                 // obtener url de descarga
                 urlDescarga = await getDownloadURL(archivoRef);
 
-                
-                
                 // Se asigna la dirección del archivo a la constante archivo
                 valores.archivo = urlDescarga;
 
-                
                 await addDoc(collection(db, "despachos"), valores);
-
+                
             } else {
+                
                 await addDoc(collection(db, "despachos"), valores);
                 
             }
 
-            navigate('/despachos')//Redirecciona al usuario a otra ventana
-
         } catch (error) {
             console.log(error);
         }
+
+        navigate('/despachos')//Redirecciona al usuario a otra ventana
 
     }
 
@@ -197,10 +195,13 @@ const Formulario = ({despacho, cargando}) => {
                         className='mt-5 w-full bg-orange-800 p-3 text-white uppercase font-bold text-lg
                          cursor-pointer hover:text-orange-300 transition-colors'
                     />
+
+                    
                     
                     
                     
                 </Form>
+                
                 )}}
             </Formik>
         </div>
