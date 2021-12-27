@@ -133,6 +133,21 @@ const Inicio = () => {
             
 
         },
+        {
+            name: <Encabezado>Estado</Encabezado>,
+            selector: row => {row.recibido, row.despachado, row.confirmado},
+            ////////////////////////////////////////////////////////
+            cell: row => <div>{row.confirmado ? <p>Confirmado</p> : 
+            <div>{ row.despachado ? <p>Despachado</p> : 
+            <div>{ row.recibido ? <p>Recibido</p> : 
+            <p>Pendiente</p>}</div>}</div>}</div>,
+            ///////////////////////////////////////////////////////
+            sortable: false,
+            grow: 2,
+            wrap: true,
+            
+
+        },
 
         {
             name: <Encabezado>Acciones</Encabezado>,

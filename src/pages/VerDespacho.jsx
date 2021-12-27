@@ -7,10 +7,6 @@ import {
     getDoc, 
     doc, 
     updateDoc, 
-    collection, 
-    query, 
-    where, 
-    onSnapshot 
 } from "firebase/firestore";
 
 import firebaseApp from "../firebase/credenciales";
@@ -26,31 +22,36 @@ const db = getFirestore(firebaseApp);
 
 const VerDespacho = () => {
 
-    const [despacho, setDespacho] = useState();
+    const [despacho, setDespacho] = useState({
+        /* nombre: '',
+        creado: '',
+        direccion: '',
+        documento: '',
+        notas: '',
+        archivo: '',
+        
+ */
+
+    });
     const [cargando, setCargando] = useState(true);
 
     //Lee el id que tengamos en la url: hooks useParams
     const {id: enlaceID} = useParams();
 
-    //////// CAMBIOS DE ESTADO///////
-    const estadoRecibido = async() => {
-        despacho.recibido = true;
-        await updateDoc(doc(db, `despachos/${enlaceID}`), despacho);
-        console.log(despacho.recibido)
-    }
-
-    const estadoDespachado = async() => {
-        despacho.despachado = true;
-        await updateDoc(doc(db, `despachos/${enlaceID}`), despacho);
-        console.log(despacho.despachado)
-    }
-
-    const estadoConfirmado = async() => {
-        despacho.confirmado = true;
-        await updateDoc(doc(db, `despachos/${enlaceID}`), despacho);
-        console.log(despacho.confirmado)
-    }
+    
     //////////////Escucha del servidor////////////////
+
+    const {
+        nombre,
+        creado,
+        direccion,
+        documento,
+        notas,
+        recibido,
+        despachado,
+        confirmado,
+        archivo
+    } = despacho;
 
     
     useEffect(() => {
@@ -75,6 +76,42 @@ const VerDespacho = () => {
         obtenerClienteAPI();
     }, [])
 
+    //////// CAMBIOS DE ESTADO///////
+    const estadoRecibido = () => {
+
+        despacho.recibido= true;
+        setDespacho({
+            ...despacho,
+            recibido: true
+        })
+        actualizaEstado(despacho);
+    }
+
+    const estadoDespachado = async(e) => {
+        despacho.despachado= true;
+        setDespacho({
+            ...despacho,
+            despachado: true
+        })
+        actualizaEstado(despacho);
+    }
+
+    const estadoConfirmado = async(e) => {
+        despacho.confirmado= true;
+        setDespacho({
+            ...despacho,
+            confirmado: true
+        })
+        actualizaEstado(despacho);
+    }
+
+    /////// ACTUALIZA EL ESTADO //////
+    const actualizaEstado = async(despacho) => {
+        await updateDoc(doc(db, `despachos/${enlaceID}`), despacho);
+    }
+
+    
+
 
     return (
         /* Object.keys(despacho).length === 0 ? <p>No hay resultados</p> : ( */
@@ -86,43 +123,44 @@ const VerDespacho = () => {
 
             { despacho ?
             <>
-            <h1 className="text-4xl font font-extrabold tracking-tight text-gray-700 sm:text-4xl">{despacho.nombre}</h1>
+            <h1 className="text-4xl font font-extrabold tracking-tight text-gray-700 sm:text-4xl" >{nombre}</h1>
             <p className="mt-4 text-xl text-gray-500">Detalles de la Orden </p>
 
-                {despacho.creado && 
+                {creado && 
                 <p className="text-2xl mt-4 text-gray-600">
                     <span className="text-gray-500 uppercase font-bold">Creado el: </span>
-                    {`${moment(despacho.creado).format('LL')} ${moment(despacho.creado).format('LTS')}`}
+                    {`${moment(creado).format('LL')} ${moment(creado).format('LTS')}`}
                 </p>
                 }
 
-                {despacho.direccion && 
+                {direccion && 
                 <p className="text-2xl mt-4 text-gray-600">
                     <span className="text-gray-500 uppercase font-bold">Dirección: </span>
-                    {despacho.direccion}
+                    {direccion}
                 </p>
                 }
                 
-                {despacho.documento && 
+                {documento && 
                 <p className="text-2xl mt-4 text-gray-600">
                     <span className="text-gray-500 uppercase font-bold">n° documento: </span>
-                    {despacho.documento}
+                    {documento}
                 </p>
                 }
                 
-                {despacho.notas &&
+                {notas &&
                 <p className="text-2xl mt-4 text-gray-600">
                     <span className="text-gray-500 uppercase font-bold">Descripción: </span>
-                    {despacho.notas}
+                    {notas}
                 </p> }
 
                 
                 <div className="mt-6">
                 {/******************Recibido*******************/}
-                    {despacho.recibido ?
+                    {recibido ?
                     <button 
                         className="inline-block text-center mr-4 bg-green-300 border border-green rounded-md
                          py-3 px-8 font-medium text-black"
+                         value={recibido}
                     >Recibido</button>
 
                     :
@@ -130,15 +168,18 @@ const VerDespacho = () => {
                     <button 
                         className="inline-block text-center mr-4 bg-white-700 border border-green rounded-md
                          py-3 px-8 font-medium text-black hover:bg-green-300"
+                        name="recibido"
+                        value={recibido}
                         onClick={estadoRecibido}
                     >Recibido</button>
                     }
                 
                 {/******************Despachado*******************/}
-                    {despacho.despachado ?
+                    {despachado ?
                     <button 
                         className="inline-block text-center mr-4 bg-green-300 border border-green rounded-md
                         py-3 px-8 font-medium text-black"
+                        value={despachado}
                     >Despachado</button>
 
                     :
@@ -146,15 +187,18 @@ const VerDespacho = () => {
                     <button 
                         className="inline-block text-center mr-4 bg-white-700 border border-green rounded-md
                          py-3 px-8 font-medium text-black hover:bg-green-300"
+                        name="despachado"
                         onClick={estadoDespachado}
+                        value={despachado}
                     >Despachado</button>
                     }
 
                 {/******************Confirmado*******************/}
-                {despacho.confirmado ?
+                {confirmado ?
                     <button 
                         className="inline-block text-center mr-4 bg-green-300 border border-green rounded-md
                         py-3 px-8 font-medium text-black"
+                        value={confirmado}
                     >Confirmado</button>
 
                     :
@@ -162,6 +206,8 @@ const VerDespacho = () => {
                     <button 
                         className="inline-block text-center mr-4 bg-white-700 border border-green rounded-md
                          py-3 px-8 font-medium text-black hover:bg-green-300"
+                         name="confirmado"
+                         value={confirmado}
                         onClick={estadoConfirmado}
                     >Confirmado</button>
                     }
@@ -169,9 +215,9 @@ const VerDespacho = () => {
                 </div>
 
 
-                {despacho.archivo &&
+                {archivo &&
                 <p className="text-1xl mt-8 text-gray-600">
-                    <a href={despacho.archivo} className="inline-block text-center bg-orange-700 border border-transparent rounded-md py-3 px-8 font-medium text-white hover:bg-orange-800"
+                    <a href={archivo} className="inline-block text-center bg-orange-700 border border-transparent rounded-md py-3 px-8 font-medium text-white hover:bg-orange-800"
                     target="_blank">
                         <FontAwesomeIcon className="mr-2" icon={faFileDownload} />Descargar Adjunto
                     </a>
