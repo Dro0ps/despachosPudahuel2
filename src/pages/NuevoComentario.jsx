@@ -62,13 +62,13 @@ const NuevoComentario = ({despacho, enlaceID}) => {
 
                 despacho.comentarios = coment;
                 
+                console.log(coment)
                 
-                
-                await updateDoc(doc(db, `despachos/${enlaceID}`), despacho);
+                /* await updateDoc(doc(db, `despachos/${enlaceID}`), despacho.comentarios); */
 
-            } else {
-                console.log('no')
-            }
+            } 
+
+            await updateDoc(doc(db, `despachos/${enlaceID}`), despacho);
             
         } catch (error) {
             console.log(error)
