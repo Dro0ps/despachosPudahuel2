@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Spinner from "../components/Spinner";
+import Swal from 'sweetalert2';
 
 import { 
     getFirestore,
@@ -13,6 +14,8 @@ import firebaseApp from "../firebase/credenciales";
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileDownload } from "@fortawesome/free-solid-svg-icons";
+import Comentarios from "./Comentarios";
+import NuevoComentario from "./NuevoComentario";
 
 
 moment.locale("es");
@@ -29,7 +32,6 @@ const VerDespacho = () => {
         documento: '',
         notas: '',
         archivo: '',
-        
  */
 
     });
@@ -50,7 +52,9 @@ const VerDespacho = () => {
         recibido,
         despachado,
         confirmado,
-        archivo
+        archivo,
+        fecha_despachado,
+        fecha_confirmado,
     } = despacho;
 
     
@@ -87,20 +91,24 @@ const VerDespacho = () => {
         actualizaEstado(despacho);
     }
 
-    const estadoDespachado = async(e) => {
-        despacho.despachado= true;
+    const estadoDespachado = async() => {
+        despacho.despachado = true;
+        despacho.fecha_despachado = +new Date();
         setDespacho({
             ...despacho,
-            despachado: true
+            despachado: true,
+            fecha_despachado: +new Date()
         })
         actualizaEstado(despacho);
     }
 
-    const estadoConfirmado = async(e) => {
-        despacho.confirmado= true;
+    const estadoConfirmado = async() => {
+        despacho.confirmado = true;
+        despacho.fecha_confirmado = +new Date();
         setDespacho({
             ...despacho,
-            confirmado: true
+            confirmado: true,
+            fecha_confirmado: +new Date()
         })
         actualizaEstado(despacho);
     }
@@ -110,15 +118,20 @@ const VerDespacho = () => {
         await updateDoc(doc(db, `despachos/${enlaceID}`), despacho);
     }
 
-    
 
+    const alertaDespacho = () => {
+        Swal.fire('No puedes marcar Despachado sin indicar la Recepción')
+    }
+    const alertaConfirmado = () => {
+        Swal.fire('No puedes marcar Confirmado sin indicar el Despacho')
+    }
 
     return (
         /* Object.keys(despacho).length === 0 ? <p>No hay resultados</p> : ( */
         <div className="relative bg-white overflow-hidden">
-        <div className="pt-4 pb-80 sm:pt-4 sm:pb-40 lg:pt-8 lg:pb-8">
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 sm:static">
-        <div className="sm:max-w-lg">
+        <div className="pt-4 pb-80 sm:pt-4 sm:pb-20 lg:pt-8 lg:pb-8">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 sm:static flex flex-col justify-between">
+        <div className="sm:max-w-xl">
         {!cargando ? <>
 
             { despacho ?
@@ -153,6 +166,18 @@ const VerDespacho = () => {
                     {notas}
                 </p> }
 
+                {fecha_despachado &&
+                <p className="text-2xl mt-4 text-gray-600">
+                    <span className="text-gray-500 uppercase font-bold">Despachado el: </span>
+                    {`${moment(fecha_despachado).format('LL')} ${moment(fecha_despachado).format('LTS')}`}
+                </p> }
+
+                {fecha_confirmado &&
+                <p className="text-2xl mt-4 text-gray-600">
+                    <span className="text-gray-500 uppercase font-bold">Confirmado el: </span>
+                    {`${moment(fecha_confirmado).format('LL')} ${moment(fecha_confirmado).format('LTS')}`}
+                </p> }
+
                 
                 <div className="mt-6">
                 {/******************Recibido*******************/}
@@ -184,13 +209,31 @@ const VerDespacho = () => {
 
                     :
 
-                    <button 
-                        className="inline-block text-center mr-4 bg-white-700 border border-green rounded-md
-                         py-3 px-8 font-medium text-black hover:bg-green-300"
-                        name="despachado"
-                        onClick={estadoDespachado}
-                        value={despachado}
-                    >Despachado</button>
+                    <>
+                        { recibido ?
+                            <button 
+                                className="inline-block text-center mr-4 bg-white-700 border border-green rounded-md
+                                py-3 px-8 font-medium text-black hover:bg-green-300"
+                                name="despachado"
+                                onClick={estadoDespachado}
+                                value={despachado}
+                            >Despachado</button>
+
+                            :
+
+                            <button 
+                                className="inline-block text-center mr-4 bg-white-700 border border-green rounded-md
+                                py-3 px-8 font-medium text-black "
+                                name="despachado"
+                                onClick={alertaDespacho}
+                                value={despachado}
+                            >Despachado</button>
+
+                        }
+                        
+                    </>
+
+                    
                     }
 
                 {/******************Confirmado*******************/}
@@ -203,13 +246,32 @@ const VerDespacho = () => {
 
                     :
 
-                    <button 
-                        className="inline-block text-center mr-4 bg-white-700 border border-green rounded-md
-                         py-3 px-8 font-medium text-black hover:bg-green-300"
-                         name="confirmado"
-                         value={confirmado}
-                        onClick={estadoConfirmado}
-                    >Confirmado</button>
+                    <>
+                    
+                    {despachado ?
+                        <button 
+                            className="inline-block text-center mr-4 bg-white-700 border border-green rounded-md
+                            py-3 px-8 font-medium text-black hover:bg-green-300"
+                            name="confirmado"
+                            value={confirmado}
+                            onClick={estadoConfirmado}
+                        >Confirmado</button>
+
+                        :
+                        
+                        <button 
+                            className="inline-block text-center mr-4 bg-white-700 border border-green rounded-md
+                            py-3 px-8 font-medium text-black "
+                            name="confirmado"
+                            value={confirmado}
+                            onClick={alertaConfirmado}
+                        >Confirmado</button>
+
+                    }
+                        
+                    </>
+
+                    
                     }
 
                 </div>
@@ -241,6 +303,11 @@ const VerDespacho = () => {
             }
 
         </div>
+            <NuevoComentario
+                despacho = {despacho}
+                enlaceID = {enlaceID}
+            />
+            <Comentarios/>
         </div>
         </div>
         

@@ -104,7 +104,7 @@ const FormularioEdicion = ({despacho, cargando}) => {
                     direccion: despacho?.direccion ?? '',
                     documento: despacho?.documento ?? '',
                     notas: despacho?.notas ?? '',
-                    archivo: urlDescarga ?? ''
+                    archivo: urlDescarga ?? '',
                 }}
                 enableReinitialize={true} // props muy util para formulario en conjunto con defaultProps
                 onSubmit={ async (values, {resetForm}) => {

@@ -14,7 +14,7 @@ const Encabezado = styled.p`
 `;
 
 const Boton = styled.button`
-
+    padding-right: 5px
     font-size: 15px;
     font-weight: 900;
     border-radius: 5px;
@@ -143,7 +143,7 @@ const Inicio = () => {
             <p>Pendiente</p>}</div>}</div>}</div>,
             ///////////////////////////////////////////////////////
             sortable: false,
-            grow: 2,
+            grow: 0,
             wrap: true,
             
 
@@ -157,6 +157,8 @@ const Inicio = () => {
             wrap: true
 
         },
+        
+        
         
     ];
 

@@ -47,15 +47,29 @@ const Formulario = ({despacho, cargando}) => {
 
                 // obtener url de descarga
                 urlDescarga = await getDownloadURL(archivoRef);
-
+                console.log(urlDescarga)
                 // Se asigna la dirección del archivo a la constante archivo
                 valores.archivo = urlDescarga;
 
                 await addDoc(collection(db, "despachos"), valores);
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Guardado Correctamente',
+                    showConfirmButton: false,
+                    timer: 3000
+                  })
                 
             } else {
                 
                 await addDoc(collection(db, "despachos"), valores);
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Guardado Correctamente',
+                    showConfirmButton: false,
+                    timer: 3000
+                  })
                 
             }
 
@@ -89,7 +103,9 @@ const Formulario = ({despacho, cargando}) => {
                     direccion: despacho?.direccion ?? '',
                     documento: despacho?.documento ?? '',
                     notas: despacho?.notas ?? '',
-                    archivo: urlDescarga ?? ''
+                    archivo: urlDescarga ?? '',
+                    comentarios: despacho?.comentarios ?? [{}],
+
                 }}
                 enableReinitialize={true} // props muy util para formulario en conjunto con defaultProps
                 onSubmit={ async (values, {resetForm}) => {
