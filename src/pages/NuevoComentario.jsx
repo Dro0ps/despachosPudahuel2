@@ -41,6 +41,8 @@ const NuevoComentario = ({despacho, enlaceID}) => {
         console.log(comentario)
     }
 
+
+
     
 
     const handleSubmit = async() => {
@@ -60,9 +62,12 @@ const NuevoComentario = ({despacho, enlaceID}) => {
                     
                 } )
 
-                despacho.comentarios = coment;
+
+                const nuevosComentarios = [...despacho.comentarios, coment];
+
+                despacho.comentarios = nuevosComentarios;
                 
-                console.log(coment)
+                console.log(despacho.comentarios)
                 
                 /* await updateDoc(doc(db, `despachos/${enlaceID}`), despacho.comentarios); */
 
