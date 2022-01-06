@@ -15,7 +15,7 @@ const Comentarios = ({comentario}) => {
         <div>
 
             <li>{comentario.comentario}</li>
-            <a href={comentario.adjuntoComentario} target="_blank">Ver</a>
+            {/* <a href={comentario.adjuntoComentario} target="_blank">Ver</a> */}
 
             
             

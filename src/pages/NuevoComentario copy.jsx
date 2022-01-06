@@ -22,9 +22,31 @@ const NuevoComentario = ({despacho, enlaceID}) => {
     const [coment, setComent] = useState({
         id: uid(),
         comentario: '',
+        adjuntoComentario: ''
     })
 
-    const { comentario } = coment;
+    const [archivoLocal, setArchivoLocal] = useState()
+
+
+    const {comentario, adjuntoComentario} = coment;
+
+    
+    const leerArchivo = async e => {
+        await setArchivoLocal( e.target.files[0] );
+        
+    }
+
+    let urlDescarga;
+    let archivoRef;
+
+    const subirArchivo = async e => {
+        archivoRef = await ref(storage, `comentarios/${archivoLocal.name}`);
+        
+        await uploadBytes(archivoRef, archivoLocal);
+
+        // obtener url de descarga
+        urlDescarga = await getDownloadURL(archivoRef);
+    }
 
     const handleComentario = e => {
 
@@ -37,15 +59,50 @@ const NuevoComentario = ({despacho, enlaceID}) => {
 
 
     const handleSubmit = async() => {
-
-        let nuevosComentarios = [...despacho.comentarios, coment];
-
         try {
-            despacho.comentarios = nuevosComentarios;
-            await updateDoc(doc(db, `despachos/${enlaceID}`), despacho);
+            if(archivoLocal) {
+                console.log(archivoLocal)
 
-        /* await updateDoc(doc(db, `despachos/${enlaceID}`), despacho.comentarios); */
+                await subirArchivo();
 
+                if(urlDescarga) {
+                    setArchivoLocal({
+                        ...coment,
+                        adjuntoComentario : urlDescarga
+                    })
+                }
+
+                if(coment.adjuntoComentario) {
+
+                    let nuevosComentarios = [...despacho.comentarios, coment];
+
+                    const asignarAdjunto = () => {
+
+                        console.log('hola',coment)
+                        despacho.comentarios = nuevosComentarios;
+                        console.log(despacho.comentarios)
+                    }
+
+                    await asignarAdjunto();
+
+                    await updateDoc(doc(db, `despachos/${enlaceID}`), despacho);
+
+                }
+
+
+
+                
+
+                
+
+                /* await updateDoc(doc(db, `despachos/${enlaceID}`), despacho.comentarios); */
+
+            } 
+
+           
+
+            
+            
         } catch (error) {
             console.log(error)
         }
@@ -53,10 +110,8 @@ const NuevoComentario = ({despacho, enlaceID}) => {
         setOpen(false)
 
         console.log(despacho)
-
-    }
         
-    
+    }
 
     return (
         <>
@@ -114,7 +169,7 @@ const NuevoComentario = ({despacho, enlaceID}) => {
                             </textarea>
                         </div>
 
-                        {/* <div className='mt-4'>
+                        <div className='mt-4'>
                             <input 
                             type="file"
                             onChange={leerArchivo}
@@ -125,7 +180,7 @@ const NuevoComentario = ({despacho, enlaceID}) => {
                             file:bg-violet-50 file:text-orange-700
                             hover:file:bg-violet-100"
                         />
-                        </div> */}
+                        </div>
                     </div>
                     </div>
                 </div>
