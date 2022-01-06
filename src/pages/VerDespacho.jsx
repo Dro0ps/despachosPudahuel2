@@ -26,6 +26,7 @@ const db = getFirestore(firebaseApp);
 const VerDespacho = () => {
 
     const [despacho, setDespacho] = useState({
+        
         /* nombre: '',
         creado: '',
         direccion: '',
@@ -55,6 +56,7 @@ const VerDespacho = () => {
         archivo,
         fecha_despachado,
         fecha_confirmado,
+        comentarios
     } = despacho;
 
     
@@ -307,7 +309,29 @@ const VerDespacho = () => {
                 despacho = {despacho}
                 enlaceID = {enlaceID}
             />
-            <Comentarios/>
+
+            <div className="sm:max-w-xl pt-20">
+                <h1 className="text-4xl font font-extrabold tracking-tight text-gray-700 sm:text-4xl">Comentarios: </h1>
+                    { comentarios ? comentarios.map(comentario => (
+                        <Comentarios
+                            key = {comentarios.id}
+                            comentario={comentario}
+                        />
+                    ))
+                    :
+                    <p>pendiente</p>
+        
+        
+                     }
+            </div>
+            
+            
+            
+
+            
+            
+            
+            
         </div>
         </div>
         

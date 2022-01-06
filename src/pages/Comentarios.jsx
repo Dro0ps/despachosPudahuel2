@@ -1,19 +1,23 @@
+import { useEffect } from "react";
 
 
 
-const Comentarios = () => {
+const Comentarios = ({comentario}) => {
 
+    console.log(comentario);
 
-
-
+    useEffect(() => {
+        
+    }, [])
 
 
     return (
         <div>
 
-            <div className="sm:max-w-xl pt-20">
-                <h1 className="text-4xl font font-extrabold tracking-tight text-gray-700 sm:text-4xl">Comentarios: </h1>
-            </div>
+            <li>{comentario.comentario}</li>
+            <a href={comentario.adjuntoComentario} target="_blank">Ver</a>
+
+            
             
         </div>
     )

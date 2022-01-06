@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom'; // para redireccionar
 import firebaseApp from '../firebase/credenciales';
 import { getFirestore, addDoc, collection, updateDoc, doc} from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL} from 'firebase/storage';
+import { uid } from 'uid';
 
 
 const db = getFirestore(firebaseApp);
@@ -19,6 +20,7 @@ const NuevoComentario = ({despacho, enlaceID}) => {
     const [open, setOpen] = useState(false)
 
     const [coment, setComent] = useState({
+        id: uid(),
         comentario: '',
         adjuntoComentario: ''
     })
@@ -41,6 +43,7 @@ const NuevoComentario = ({despacho, enlaceID}) => {
         console.log(comentario)
     }
 
+    
 
 
     
@@ -56,24 +59,33 @@ const NuevoComentario = ({despacho, enlaceID}) => {
                 // obtener url de descarga
                 const urlDescarga = await getDownloadURL(archivoRef);
 
-                await setComent({
-                    ...coment,
-                    adjuntoComentario : urlDescarga,
-                    
-                } )
+                const asignaDireccionArchivo = async() => {
+                    await setComent({
+                        ...coment,
+                        adjuntoComentario : urlDescarga,
+                        
+                    } )
+                }
 
+                asignaDireccionArchivo();
+                
 
                 const nuevosComentarios = [...despacho.comentarios, coment];
 
                 despacho.comentarios = nuevosComentarios;
                 
                 console.log(despacho.comentarios)
+
+                await updateDoc(doc(db, `despachos/${enlaceID}`), despacho);
+
+
+                
                 
                 /* await updateDoc(doc(db, `despachos/${enlaceID}`), despacho.comentarios); */
 
             } 
 
-            await updateDoc(doc(db, `despachos/${enlaceID}`), despacho);
+            
             
         } catch (error) {
             console.log(error)
@@ -85,17 +97,9 @@ const NuevoComentario = ({despacho, enlaceID}) => {
         
     }
 
-
-
-
-   
-
-
-
-
     return (
         <>
-        <button className="m-2 text-1xl mt-4 uppercase text-gray-600" onClick={() => {setOpen(true)}}>
+        <button className="m-2 text-1xl mt-4 uppercase max-w-lg text-gray-600" onClick={() => {setOpen(true)}}>
             Agregar Comentario <FontAwesomeIcon className="text-2xl mt-4 text-gray-600" icon={faComments} />
         </button>
         <Transition.Root show={open} as={Fragment}>
