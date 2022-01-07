@@ -16,6 +16,12 @@ import Spinner from './components/Spinner';
 
 const auth = getAuth(db);
 
+export const user = auth.currentUser;
+
+ 
+
+
+
 
 
 function App() {
@@ -42,7 +48,7 @@ function App() {
 
   return (
     <>
-      <BrowserRouter>
+      <BrowserRouter >
         <Routes>
           { usuarioGlobal ? 
           <>
@@ -67,7 +73,7 @@ function App() {
               <Route index element={<Inicio/>}/>
               <Route path="nuevo" element={<NuevoDespacho/>}/>
               <Route path="editar/:id" element={<EditarDespacho/>}/>
-              <Route path=":id" element={<VerDespacho/>}/>
+              <Route path=":id" element={<VerDespacho />}/>
             </Route>
 
           </>

@@ -104,7 +104,7 @@ const Formulario = ({despacho, cargando}) => {
                     documento: despacho?.documento ?? '',
                     notas: despacho?.notas ?? '',
                     archivo: urlDescarga ?? '',
-                    comentarios: despacho?.comentarios ?? [{}],
+                    comentarios: despacho?.comentarios ?? [],
 
                 }}
                 enableReinitialize={true} // props muy util para formulario en conjunto con defaultProps

@@ -1,4 +1,4 @@
-import { Fragment, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { AnnotationIcon } from '@heroicons/react/outline'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,6 +10,10 @@ import firebaseApp from '../firebase/credenciales';
 import { getFirestore, addDoc, collection, updateDoc, doc} from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL} from 'firebase/storage';
 import { uid } from 'uid';
+import Swal from 'sweetalert2';
+import Comentarios from './Comentarios';
+import Spinner from '../components/Spinner';
+import { user } from '../App';
 
 
 const db = getFirestore(firebaseApp);
@@ -19,22 +23,49 @@ const NuevoComentario = ({despacho, enlaceID}) => {
 
     const [open, setOpen] = useState(false)
 
+    const [usuario, setUsuario] = useState()
+ 
+
     const [coment, setComent] = useState({
         id: uid(),
         comentario: '',
+        creador: usuario
+        
     })
 
-    const { comentario } = coment;
+    const { comentario, creador } = coment;
+
+   let email;
 
     const handleComentario = e => {
+
+        email = user.email;
 
         setComent({
             ...coment,
             comentario: e.target.value,
+            creador: email
+
         })
         console.log(coment)
     }
+        
+   
 
+    
+
+    const handleMensaje = () => {
+        if( coment.comentario === '' )  {
+            Swal.fire({
+                icon: 'error',
+                title: 'Formulario Vacio',
+                text: 'No puede agregar un formulario vacio!',
+                timer: 3000
+              })
+            
+        }
+    }
+    
 
     const handleSubmit = async() => {
 
@@ -54,13 +85,24 @@ const NuevoComentario = ({despacho, enlaceID}) => {
 
         console.log(despacho)
 
+        setComent({
+            ...coment,
+            comentario: '',
+            creador: ''
+
+        })
+
     }
         
+    const AbreFormulario = () => {
+        setUsuario('Hola')
+        setOpen(true)
+    }
     
 
     return (
         <>
-        <button className="m-2 text-1xl mt-4 uppercase max-w-lg text-gray-600" onClick={() => {setOpen(true)}}>
+        <button className="m-2 text-1xl mt-4 uppercase max-w-lg text-gray-600" onClick={AbreFormulario}>
             Agregar Comentario <FontAwesomeIcon className="text-2xl mt-4 text-gray-600" icon={faComments} />
         </button>
         <Transition.Root show={open} as={Fragment}>
@@ -129,18 +171,37 @@ const NuevoComentario = ({despacho, enlaceID}) => {
                     </div>
                     </div>
                 </div>
+
+                
                 <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row inline-flex justify-between">
-                    <button
-                    type="button"
-                    className="w-full inline-flex justify-center rounded-md
-                     border border-transparent shadow-sm px-4 py-2 bg-orange-600 text-base font-medium text-white 
-                      hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 sm:ml-3 
-                      sm:w-auto sm:text-sm"
-                      onClick={handleSubmit}
+
+                    { coment.comentario !== ''  ?
+                        <button
+                        type="button"
+                        className="w-full inline-flex justify-center rounded-md
+                         border border-transparent shadow-sm px-4 py-2 bg-orange-600 text-base font-medium text-white 
+                          hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 sm:ml-3 
+                          sm:w-auto sm:text-sm"
+                          onClick={handleSubmit}
+                        >
+                        Agregar Comentario
+                        </button>
+
+                        :
+
+                        <button
+                        type="button"
+                        className="w-full inline-flex justify-center rounded-md
+                         border border-transparent shadow-sm px-4 py-2 bg-gray-600 text-base font-medium text-white 
+                           focus:outline-none focus:ring-2 focus:ring-offset-2  sm:ml-3 
+                          sm:w-auto sm:text-sm"
+                          onClick={handleMensaje}
+                        >
+                        Agregar Comentario
+                        </button>
+
+                    }
                     
-                    >
-                    Agregar Comentario
-                    </button>
                     <button
                     type="button"
                     className="mt-3 w-full  rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
@@ -154,6 +215,32 @@ const NuevoComentario = ({despacho, enlaceID}) => {
             </div>
         </Dialog>
         </Transition.Root>
+
+        <div className="sm:max-w-xl pt-20">
+
+            { despacho.comentarios ? 
+            <>
+                <h2 className=" mb-5 font font-extrabold tracking-tight text-gray-700 sm:text-2xl">Comentarios: </h2>
+
+                {despacho.comentarios.map(comentario => (
+                    
+                    <Comentarios
+                        key={despacho.comentarios.id}
+                        comentario={comentario}
+                    />
+                    
+                ))}
+                
+                </>
+
+            :
+
+                <Spinner/>
+
+            }
+
+            
+        </div>
             
         </>
     )
