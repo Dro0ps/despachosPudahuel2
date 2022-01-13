@@ -7,36 +7,78 @@ import {
     signInWithRedirect,
 } from 'firebase/auth';
 
-import db from '../firebase/credenciales';
+import db from '../firebase/credenciales'
+
+
+import { doc, getFirestore, setDoc } from 'firebase/firestore';
 
 
 const auth = getAuth(db);
 
 
+
+
+
 const LoginForm = () => {
+
+  const firebaseApp = getFirestore(db);
+
+
+
+  const [isRegister, setIsRegister] = useState(false);
+
+
 
     const [user, setUser] = useState(
         {
             email: '',
-            password: ''
+            password: '',
+            nombre: '',
+            rol: ''
         }
     );
 
-    const { email, password } = user;
+    const { email, password, nombre, rol} = user;
 
     const handleChange = e => {
         setUser({
             ...user,
             [e.target.name] : e.target.value
+            
         })
+        
+    }
+
+    const registrarUsuario = async(email, password, nombre, rol) =>{
+      const infoUsuario = await createUserWithEmailAndPassword(auth, email, password).then((usuarioFirebase) => {
+        return usuarioFirebase;
+      })
+      console.log(infoUsuario.user.uid)
+      const docuRef = await doc(firebaseApp,'usuarios', infoUsuario.user.uid);
+      await setDoc(docuRef, {nombre: nombre, rol: rol, email: email});
     }
 
     async function submitHandler(e){
         e.preventDefault();
 
-        const sesion = signInWithEmailAndPassword(auth, email, password);
-            console.log(sesion);
+        if (isRegister) {
+          registrarUsuario(email, password, nombre, rol)
+          }
 
+        else {
+          const sesion = signInWithEmailAndPassword(auth, email, password);
+            console.log(sesion);
+        }
+
+    }
+
+    const activaRegistro = () =>{
+      if(!isRegister){
+        setIsRegister(true);
+      } else {
+        setIsRegister(false);
+      }
+      
     }
 
     return (
@@ -50,11 +92,30 @@ const LoginForm = () => {
               src="https://homar.cl/wp-content/uploads/2020/09/logo-homar.png"
               alt="Workflow"
             />
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Inicia Sesión</h2>
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">{!isRegister ? "Inicia Sesión" : "Registrate"}</h2>
             
           </div>
           <form className="mt-8 space-y-6" onSubmit={submitHandler}>
+            
             <div className="rounded-md shadow-sm -space-y-px">
+
+            { isRegister &&
+              <div>
+                <input
+                  id="nombre"
+                  name="nombre"
+                  value={nombre}
+                  type="text"
+                  autoComplete="nombre"
+                  required
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
+                  placeholder="Nombre de Usuario"
+                  onChange={handleChange}
+                />
+              </div>
+            
+            }
+              
               <div>
                 <input
                   id="email"
@@ -64,7 +125,7 @@ const LoginForm = () => {
                   autoComplete="email"
                   required
                   className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
-                  placeholder="Email address"
+                  placeholder="Correo"
                   onChange={handleChange}
                 />
               </div>
@@ -78,10 +139,33 @@ const LoginForm = () => {
                   type="password"
                   value={password}
                   required
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 
+                  placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-orange-500 
+                  focus:border-orange-500 focus:z-10 sm:text-sm"
                   placeholder="Password"
                   onChange={handleChange}
                 />
+              </div>
+              <div>
+              { isRegister &&
+                <select
+                  required
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 
+                  placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none 
+                  focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
+                  name="rol"
+                  id='rol'
+                  value={rol}
+                  onChange={handleChange}
+                >
+                  <option value="">-- Seleccione Rol del Usuario --</option>
+                  <option value="vendedor">vendedor</option>
+                  <option value="bodega">bodega</option>
+                  <option value="administrador">administrador</option>
+                </select>
+              }
+                  
+                
               </div>
             </div>
 
@@ -94,8 +178,18 @@ const LoginForm = () => {
                 <span className="absolute left-0 inset-y-0 flex items-center pl-3">
                   <LockClosedIcon className="h-5 w-5 text-orange-500 group-hover:text-orange-400" aria-hidden="true" />
                 </span>
-                Sign in
+                {!isRegister ? "Iniciar Sesión" : "Registrarse"}
               </button>
+
+              <div className=' mt-4'>
+              {
+                !isRegister ? <button onClick={activaRegistro}>¿Quieres Registrarse?</button>
+                : <button onClick={activaRegistro}>¿Quieres Iniciar Sesión?</button>
+              }
+              </div>
+
+              
+              
             </div>
           </form>
         </div>

@@ -37,7 +37,7 @@ const Formulario = ({despacho, cargando}) => {
     const handleSubmit = async (valores) => {
 
         try {
-                console.log(archivoLocal);
+                
 
             if(archivoLocal) {
 
@@ -81,7 +81,7 @@ const Formulario = ({despacho, cargando}) => {
 
     }
 
-    console.log(cargando);
+   
 
 
     return (

@@ -7,95 +7,92 @@ import { useNavigate } from 'react-router-dom'; // para redireccionar
 
 /////// FIREBASE //////
 import firebaseApp from '../firebase/credenciales';
-import { getFirestore, addDoc, collection, updateDoc, doc} from 'firebase/firestore';
-import { getStorage, ref, uploadBytes, getDownloadURL} from 'firebase/storage';
+import { getFirestore, updateDoc, doc} from 'firebase/firestore';
+import { getStorage} from 'firebase/storage';
 import { uid } from 'uid';
 import Swal from 'sweetalert2';
 import Comentarios from './Comentarios';
 import Spinner from '../components/Spinner';
-import { user } from '../App';
+
+import moment from 'moment';
+
+
+
+
 
 
 const db = getFirestore(firebaseApp);
 const storage = getStorage(firebaseApp);
 
-const NuevoComentario = ({despacho, enlaceID}) => {
+
+const NuevoComentario = ({despacho, enlaceID, usuario}) => {
+
+    
 
     const [open, setOpen] = useState(false)
-
-    const [usuario, setUsuario] = useState()
- 
 
     const [coment, setComent] = useState({
         id: uid(),
         comentario: '',
-        creador: usuario
+        creador: usuario,
+        creado: `${moment().format('LT')} el ${moment().format('L')}`
         
     })
 
-    const { comentario, creador } = coment;
+    const { comentario } = coment;
 
-   let email;
 
-    const handleComentario = e => {
+    const handleComentario =  e => {
 
-        email = user.email;
-
-        setComent({
+         setComent({
             ...coment,
-            comentario: e.target.value,
-            creador: email
+            [e.target.name]: e.target.value,
 
         })
-        console.log(coment)
+
     }
         
-   
 
-    
+    const handleSubmit = async() => {
 
-    const handleMensaje = () => {
-        if( coment.comentario === '' )  {
+        if( coment.comentario === '' ) {
             Swal.fire({
                 icon: 'error',
                 title: 'Formulario Vacio',
                 text: 'No puede agregar un formulario vacio!',
                 timer: 3000
               })
+            return;
+        } else {
             
+            let nuevosComentarios = [...despacho.comentarios, coment];
+
+            try {
+                despacho.comentarios = nuevosComentarios;
+                await updateDoc(doc(db, `despachos/${enlaceID}`), despacho);
+
+            /* await updateDoc(doc(db, `despachos/${enlaceID}`), despacho.comentarios); */
+
+            } catch (error) {
+                console.log(error)
+            }
+
+            setOpen(false)
+
+            setComent({
+                ...coment,
+                comentario: '',
+            })
+
+
         }
-    }
-    
 
-    const handleSubmit = async() => {
-
-        let nuevosComentarios = [...despacho.comentarios, coment];
-
-        try {
-            despacho.comentarios = nuevosComentarios;
-            await updateDoc(doc(db, `despachos/${enlaceID}`), despacho);
-
-        /* await updateDoc(doc(db, `despachos/${enlaceID}`), despacho.comentarios); */
-
-        } catch (error) {
-            console.log(error)
-        }
-
-        setOpen(false)
-
-        console.log(despacho)
-
-        setComent({
-            ...coment,
-            comentario: '',
-            creador: ''
-
-        })
+        
 
     }
         
     const AbreFormulario = () => {
-        setUsuario('Hola')
+        
         setOpen(true)
     }
     
@@ -156,6 +153,24 @@ const NuevoComentario = ({despacho, enlaceID}) => {
                             </textarea>
                         </div>
 
+                        
+
+
+                        {/* <select
+                            className='mt-2 border border-gray-150'
+                            name="creador"
+                            value={creador}
+                            onChange={handleComentario}
+                        >
+                            <option value="">-- Seleccione --</option>
+                            <option value="Sergio">Sergio</option>
+                            <option value="Johanna">Johanna</option>
+                            <option value="Jorge">Jorge</option>
+                            <option value="Darnel">Darnel</option>
+                            <option value="Maria">Maria</option>
+                            
+                        </select> */}
+
                         {/* <div className='mt-4'>
                             <input 
                             type="file"
@@ -175,13 +190,15 @@ const NuevoComentario = ({despacho, enlaceID}) => {
                 
                 <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row inline-flex justify-between">
 
-                    { coment.comentario !== ''  ?
+                    { (coment.creador !== '' )  ?
+                    
                         <button
                         type="button"
                         className="w-full inline-flex justify-center rounded-md
                          border border-transparent shadow-sm px-4 py-2 bg-orange-600 text-base font-medium text-white 
                           hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 sm:ml-3 
                           sm:w-auto sm:text-sm"
+                          
                           onClick={handleSubmit}
                         >
                         Agregar Comentario
@@ -195,7 +212,7 @@ const NuevoComentario = ({despacho, enlaceID}) => {
                          border border-transparent shadow-sm px-4 py-2 bg-gray-600 text-base font-medium text-white 
                            focus:outline-none focus:ring-2 focus:ring-offset-2  sm:ml-3 
                           sm:w-auto sm:text-sm"
-                          onClick={handleMensaje}
+                          
                         >
                         Agregar Comentario
                         </button>

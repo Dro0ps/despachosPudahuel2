@@ -142,10 +142,9 @@ const Inicio = () => {
             <div>{ row.recibido ? <p>Recibido</p> : 
             <p>Pendiente</p>}</div>}</div>}</div>,
             ///////////////////////////////////////////////////////
-            sortable: false,
+            sortable: true,
             grow: 0,
             wrap: true,
-            
 
         },
 
@@ -195,6 +194,7 @@ const Inicio = () => {
                 item.direccion.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,"").includes(this.state.busqueda) ||
                 item.documento.toString().includes(this.state.busqueda) ||
                 item.notas.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,"").includes(this.state.busqueda) 
+                
                 
                 
                 ){

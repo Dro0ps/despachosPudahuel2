@@ -24,7 +24,7 @@ moment.locale("es");
 
 const db = getFirestore(firebaseApp);
 
-const VerDespacho = () => {
+const VerDespacho = ({usuario}) => {
 
     const [despacho, setDespacho] = useState({
         
@@ -171,14 +171,14 @@ const VerDespacho = () => {
 
                 {fecha_despachado &&
                 <p className="text-2xl mt-4 text-gray-600">
-                    <span className="text-gray-500 uppercase font-bold">Despachado el: </span>
-                    {`${moment(fecha_despachado).format('LL')} ${moment(fecha_despachado).format('LTS')}`}
+                    <span className="text-gray-500 uppercase font-bold">Despachado: </span>
+                    {`${moment(fecha_despachado).format('L')} a las ${moment(fecha_despachado).format('LT')} `}
                 </p> }
 
                 {fecha_confirmado &&
                 <p className="text-2xl mt-4 text-gray-600">
-                    <span className="text-gray-500 uppercase font-bold">Confirmado el: </span>
-                    {`${moment(fecha_confirmado).format('LL')} ${moment(fecha_confirmado).format('LTS')}`}
+                    <span className="text-gray-500 uppercase font-bold">Confirmado: </span>
+                    {`${moment(fecha_confirmado).format('L')} a las ${moment(fecha_confirmado).format('LT')} `}
                 </p> }
 
                 
@@ -309,6 +309,8 @@ const VerDespacho = () => {
             <NuevoComentario
                 despacho = {despacho}
                 enlaceID = {enlaceID}
+                usuario = {usuario}
+
             />
 
            

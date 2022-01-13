@@ -11,14 +11,16 @@ import NuevoDespacho from './pages/NuevoDespacho';
 
 import db from './firebase/credenciales';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import Spinner from './components/Spinner';
+
 
 
 const auth = getAuth(db);
 
-export const user = auth.currentUser;
 
- 
+
+ const firestore = getFirestore(db);
 
 
 
@@ -29,22 +31,53 @@ function App() {
   /* console.log(import.meta.env); */
 
   const [usuarioGlobal, setUsuarioGlobal] = useState(true);
+  const [ user, setUser ] = useState(null);
+
+  const obtenerUser = async(uid) => {
+    const docuRef = doc(firestore, `usuarios/${uid}`);
+    const docuCifrada = await getDoc(docuRef);
+    const infoUser = docuCifrada.data();
+    return infoUser;
+  }
+
+  const setUserWithFirebaseAndRolAndName = async(usuarioFirebase) => {
+    await obtenerUser(usuarioFirebase.uid).then((usuario) => {
+      const userData = {
+        uid: usuarioFirebase.uid,
+        email: usuarioFirebase.email,
+        rol: usuario.rol,
+        nombre: usuario.nombre
+      };
+      setUser(userData);
+      console.log("userData final: ", userData);
+    })
+  }
+
+  obtenerUser()
+
+
+  
 
   useEffect(() => {
     onAuthStateChanged(auth,(usuarioFirebase) => {
       if (usuarioFirebase) {
+
+        if (!user) {
+           setUserWithFirebaseAndRolAndName(usuarioFirebase);
+        }
+
+        
           // Codígo en caso de que haya sesión iniciada
           setUsuarioGlobal(false);
       } else {
+
+        setUser(null)
           // Codígo en caso de que no haya sesión iniciada
           setUsuarioGlobal(true);
       }
   })
     
   }, [])
-
-
- 
 
   return (
     <>
@@ -69,11 +102,11 @@ function App() {
               element={<Navigate replace to='/despachos'/>}
             />
             
-            <Route path="/despachos" element={<Layout/>}>
+            <Route path="/despachos" element={<Layout />}>
               <Route index element={<Inicio/>}/>
               <Route path="nuevo" element={<NuevoDespacho/>}/>
               <Route path="editar/:id" element={<EditarDespacho/>}/>
-              <Route path=":id" element={<VerDespacho />}/>
+              <Route path=":id" element={<VerDespacho usuario={user} />}/>
             </Route>
 
           </>
