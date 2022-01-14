@@ -49,7 +49,6 @@ function App() {
         nombre: usuario.nombre
       };
       setUser(userData);
-      console.log("userData final: ", userData);
     })
   }
 

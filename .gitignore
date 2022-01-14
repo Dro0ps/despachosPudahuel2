@@ -56,6 +56,12 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 
+# Ignora Firebase
+.firebase/*
+
+
+.github\*
+
 # dotenv environment variables file
 .env
 
