@@ -13,6 +13,10 @@ import db from './firebase/credenciales';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import Spinner from './components/Spinner';
+import Pendientes from './pages/Pendientes';
+import Despachados from './pages/Despachados';
+import Confirmados from './pages/Confirmados';
+import Loading from './components/Loading';
 
 
 
@@ -53,39 +57,39 @@ function App() {
   }
 
   obtenerUser()
-
-
   
 
   useEffect(() => {
+    
     onAuthStateChanged(auth,(usuarioFirebase) => {
       if (usuarioFirebase) {
 
         if (!user) {
            setUserWithFirebaseAndRolAndName(usuarioFirebase);
         }
-
-        
           // Codígo en caso de que haya sesión iniciada
-          setUsuarioGlobal(false);
-      } else {
-
-        setUser(null)
-          // Codígo en caso de que no haya sesión iniciada
           setUsuarioGlobal(true);
+      } else {
+          setUser(null)
+          // Codígo en caso de que no haya sesión iniciada
+          setUsuarioGlobal(false);
       }
   })
     
   }, [])
 
+  
+
   return (
     <>
+    
       <BrowserRouter >
         <Routes>
-          { usuarioGlobal ? 
-          <>
-              <Route path="/" element={<IniciarSesion/>}>
-                <Route index element={<LoginForm/>}/>
+          { !usuarioGlobal ? 
+          <>       
+
+              <Route path="/" element={<IniciarSesion />}>
+                <Route index element={<LoginForm usuario={user}/>}/>
               </Route>
 
               <Route
@@ -96,17 +100,42 @@ function App() {
             :
             <>
 
+          {user ?
+
+          <>
             <Route
               path='/'
               element={<Navigate replace to='/despachos'/>}
             />
             
-            <Route path="/despachos" element={<Layout />}>
+            <Route path="/despachos" element={<Layout usuario={user}/>}>
               <Route index element={<Inicio/>}/>
               <Route path="nuevo" element={<NuevoDespacho/>}/>
+              <Route path="pendientes" element={<Pendientes/>}/>
+              <Route path="despachados" element={<Despachados/>}/>
+              <Route path="confirmados" element={<Confirmados/>}/>
               <Route path="editar/:id" element={<EditarDespacho/>}/>
               <Route path=":id" element={<VerDespacho usuario={user} />}/>
             </Route>
+          
+          </>
+
+          :
+          <>
+          <Route path="/" element={<IniciarSesion />}>
+                <Route index element={<LoginForm usuario={user}/>}/>
+              </Route>
+
+              <Route
+                path='/*'
+                element={<Navigate replace to='/'/>}
+              />
+          </>
+            
+            
+          }
+
+            
 
           </>
 

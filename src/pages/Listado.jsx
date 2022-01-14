@@ -250,10 +250,7 @@ const Inicio = () => {
                             fixedHeaderScrollHeight="1000px"
                             progressPending={pending}
                             noDataComponent={<p>No se encontro ningún elemento</p>}
-                            
-                            
-                            
-                            
+  
                         />
                    
                 </>
@@ -262,36 +259,11 @@ const Inicio = () => {
     }
 
     /************* FIN DE COMPONENTE DE TABLA *************/
-    
-
-
 
     return (
         <>
             <h1 className='font-extrabold text-4xl flex justify-center text-orange-900'>Listado de despachos</h1>
             
-
-            {/* <table className='w-full mt-5 table-auto shadow bg-white '>
-                <thead className='bg-orange-800 text-white'>
-                    <tr>
-                        <th className='p-2'>N°</th>
-                        <th className='p-2'>Descripción</th>
-                        <th className='p-2'>Acciones</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {despachos.map( despacho => (
-                        <Despacho
-                            key={despacho.id}
-                            despacho={despacho}
-                            handleEliminar={handleEliminar}
-                        />
-                    ))}
-                </tbody>
-            </table>    */}         
-
-
             <Tabla />
             
         </>

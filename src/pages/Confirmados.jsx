@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react'
-/* import Despacho from '../components/Despacho'; */
-import { collection, query, getDocs, getFirestore, doc, deleteDoc } from "firebase/firestore";
-import firebaseApp from '../firebase/credenciales';
+import React, { useEffect, useState } from 'react'
+import { collection, query, getDocs, getFirestore, doc, deleteDoc, where } from "firebase/firestore";
+import db from '../firebase/credenciales';
 import DataTable from 'react-data-table-component';
 import { Component } from 'react/cjs/react.production.min';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import moment from 'moment';
+
+
+const firestore = getFirestore(db)
 
 
 const Encabezado = styled.p`
@@ -33,15 +35,10 @@ moment.locale('es', {
   }
   );
 
-
-const db = getFirestore(firebaseApp);
-
-const Inicio = () => {
+const Confirmados = () => {
 
     moment.locale('es');
 
-    
-   
     const navigate = useNavigate();
 
     const [despachos, setDespachos] = useState([]);
@@ -52,7 +49,7 @@ const Inicio = () => {
         const obtenerDespachosApi = async () => {
             try {
                 //Como llamar documentos y listarlos en Firebase IMPORTANTE
-                const q = query(collection(db,"despachos"));
+                const q = query(collection(firestore,"despachos"), where("confirmado","==",true));
                 const querySnapshot = await getDocs(q);
                 
                 const resultado = [];
@@ -79,26 +76,9 @@ const Inicio = () => {
         obtenerDespachosApi();
     }, [])
 
-    const handleEliminar = async id => {
-        const confirmar = confirm('¿Deseas eliminar este cliente?')
 
-        if(confirmar) {
-            try {
-                await deleteDoc(doc(db, `despachos/${id}`))
-
-                // Elimina del state el despacho eliminado de la api y lo actualiza
-                // llama todos los despachos que sean diferentes al id seleccionado para eliminarlo del state
-                const arrayDespachos = despachos.filter( despacho => despacho.id !== id )
-                setDespachos(arrayDespachos);
-                
-            } catch (error) {
-                console.log(error);
-            }
-        }
-    }
-
-    /* onClick={() => {navigate(`/despachos/editar/${id}`)}} */
-
+    
+    const handleSort = (column, sortDirection) => console.log(column.selector, sortDirection);
 
     const columnas = [
         
@@ -124,7 +104,8 @@ const Inicio = () => {
             selector: row => row.direccion,
             sortable: false,
             grow: 1,
-            wrap: true
+            wrap: true,
+            
 
         },
         
@@ -160,14 +141,14 @@ const Inicio = () => {
 
         },
 
-        {
+        /* {
             name: <Encabezado>Acciones</Encabezado>,
             cell: row => <Boton  onClick={() => {navigate(`/despachos/editar/${row.id}`)}}>Editar</Boton>,
             sortable: false,
             grow: 0,
             wrap: true
 
-        },
+        }, */
         
         
         
@@ -186,6 +167,8 @@ const Inicio = () => {
 
     /**************** COMPONENTE DE TABLA ****************/
     class Tabla extends Component{
+
+        
         
         //Buscador
         state={
@@ -250,6 +233,7 @@ const Inicio = () => {
                             fixedHeaderScrollHeight="1000px"
                             progressPending={pending}
                             noDataComponent={<p>No se encontro ningún elemento</p>}
+                            onSort={handleSort}
                             
                             
                             
@@ -262,40 +246,17 @@ const Inicio = () => {
     }
 
     /************* FIN DE COMPONENTE DE TABLA *************/
-    
+
 
 
 
     return (
         <>
-            <h1 className='font-extrabold text-4xl flex justify-center text-orange-900'>Listado de despachos</h1>
-            
-
-            {/* <table className='w-full mt-5 table-auto shadow bg-white '>
-                <thead className='bg-orange-800 text-white'>
-                    <tr>
-                        <th className='p-2'>N°</th>
-                        <th className='p-2'>Descripción</th>
-                        <th className='p-2'>Acciones</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {despachos.map( despacho => (
-                        <Despacho
-                            key={despacho.id}
-                            despacho={despacho}
-                            handleEliminar={handleEliminar}
-                        />
-                    ))}
-                </tbody>
-            </table>    */}         
-
+            <h1 className='font-extrabold text-4xl flex justify-center text-orange-900'>Listado de Pendientes</h1>
 
             <Tabla />
-            
         </>
     )
 }
 
-export default Inicio
+export default Confirmados

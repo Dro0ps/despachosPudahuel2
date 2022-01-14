@@ -1,9 +1,15 @@
 import { Outlet } from "react-router-dom"
 
-const IniciarSesion = () => {
+
+
+
+const IniciarSesion = (usuario) => {
+    
     return (
         <>
-            <Outlet/>
+        
+        <Outlet/>
+
         </>
     )
 }

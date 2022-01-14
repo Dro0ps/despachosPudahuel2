@@ -35,7 +35,7 @@ const NuevoComentario = ({despacho, enlaceID, usuario}) => {
         id: uid(),
         comentario: '',
         creador: usuario,
-        creado: `${moment().format('LT')} el ${moment().format('L')}`
+        creado: +new Date()
         
     })
 
