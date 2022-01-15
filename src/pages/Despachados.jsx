@@ -249,7 +249,7 @@ const Despachados = () => {
 
     return (
         <>
-            <h1 className='font-extrabold text-4xl flex justify-center text-orange-900'>Listado de Pendientes</h1>
+            <h1 className='font-extrabold text-4xl flex justify-center text-orange-900'>Listado de Despachos</h1>
 
             <Tabla />
         </>

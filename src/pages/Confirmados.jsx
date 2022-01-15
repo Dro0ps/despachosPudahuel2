@@ -252,7 +252,7 @@ const Confirmados = () => {
 
     return (
         <>
-            <h1 className='font-extrabold text-4xl flex justify-center text-orange-900'>Listado de Pendientes</h1>
+            <h1 className='font-extrabold text-4xl flex justify-center text-orange-900'>Listado de Confirmados</h1>
 
             <Tabla />
         </>
