@@ -149,7 +149,7 @@ const Inicio = () => {
             name: <Encabezado>Estado</Encabezado>,
             selector: row => {row.recibido, row.despachado, row.confirmado},
             ////////////////////////////////////////////////////////
-            cell: row => <div>{row.confirmado ? <p>Confirmado</p> : 
+            cell: row => <div>{row.confirmado ? <button >Confirmado</button> : 
             <div>{ row.despachado ? <p>Despachado</p> : 
             <div>{ row.recibido ? <p>Recibido</p> : 
             <p>Pendiente</p>}</div>}</div>}</div>,

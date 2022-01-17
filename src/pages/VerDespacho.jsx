@@ -142,26 +142,28 @@ const VerDespacho = ({usuario}) => {
             <h1 className="text-4xl font font-extrabold tracking-tight text-gray-700 sm:text-4xl" >{nombre}</h1>
             <p className="mt-4 text-xl text-gray-500">Detalles de la Orden </p>
 
-                {creado && 
-                <p className="text-2xl mt-4 text-gray-600">
-                    <span className="text-gray-500 uppercase font-bold">Creado el: </span>
-                    {`${moment(creado).format('LL')} ${moment(creado).format('LTS')}`}
-                </p>
-                }
-
-                {direccion && 
-                <p className="text-2xl mt-4 text-gray-600">
-                    <span className="text-gray-500 uppercase font-bold">Dirección: </span>
-                    {direccion}
-                </p>
-                }
-                
-                {documento && 
+                 {documento && 
                 <p className="text-2xl mt-4 text-gray-600">
                     <span className="text-gray-500 uppercase font-bold">n° documento: </span>
                     {documento}
                 </p>
                 }
+
+                {creado && 
+                <p className="text-2xl mt-4 text-gray-600">
+                    <span className="text-gray-500 uppercase font-bold">Creado el: </span>
+                    {`${moment(creado).format('Do MMMM  YYYY, h:mm:ss a')}`}
+                </p>
+                }
+
+                {direccion && 
+                <p className="text-2xl mt-4 text-gray-600">
+                    <span className="text-gray-500 uppercase font-bold">Dirección Despacho: </span>
+                    {direccion}
+                </p>
+                }
+                
+                
                 
                 {notas &&
                 <p className="text-2xl mt-4 text-gray-600">
@@ -172,13 +174,13 @@ const VerDespacho = ({usuario}) => {
                 {fecha_despachado &&
                 <p className="text-2xl mt-4 text-gray-600">
                     <span className="text-gray-500 uppercase font-bold">Despachado: </span>
-                    {`${moment(fecha_despachado).format('L')} a las ${moment(fecha_despachado).format('LT')} `}
+                    {`${moment(fecha_despachado).format('Do MMMM  YYYY, h:mm:ss a')} `}
                 </p> }
 
                 {fecha_confirmado &&
                 <p className="text-2xl mt-4 text-gray-600">
                     <span className="text-gray-500 uppercase font-bold">Confirmado: </span>
-                    {`${moment(fecha_confirmado).format('L')} a las ${moment(fecha_confirmado).format('LT')} `}
+                    {`${moment(fecha_confirmado).format('Do MMMM  YYYY, h:mm:ss a')} `}
                 </p> }
 
                 
