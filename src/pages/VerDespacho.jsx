@@ -14,7 +14,6 @@ import firebaseApp from "../firebase/credenciales";
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileDownload } from "@fortawesome/free-solid-svg-icons";
-import Comentarios from "./Comentarios";
 import NuevoComentario from "./NuevoComentario";
 
 
@@ -26,17 +25,7 @@ const db = getFirestore(firebaseApp);
 
 const VerDespacho = ({usuario}) => {
 
-    const [despacho, setDespacho] = useState({
-        
-        /* nombre: '',
-        creado: '',
-        direccion: '',
-        documento: '',
-        notas: '',
-        archivo: '',
- */
-
-    });
+    const [despacho, setDespacho] = useState({});
     const [cargando, setCargando] = useState(true);
 
     //Lee el id que tengamos en la url: hooks useParams
@@ -57,7 +46,6 @@ const VerDespacho = ({usuario}) => {
         archivo,
         fecha_despachado,
         fecha_confirmado,
-        comentarios
     } = despacho;
 
     

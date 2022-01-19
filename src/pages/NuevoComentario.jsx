@@ -1,24 +1,18 @@
-import { Fragment, useEffect, useRef, useState } from 'react'
+import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { AnnotationIcon } from '@heroicons/react/outline'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComments } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from 'react-router-dom'; // para redireccionar
+import { getStorage, ref, uploadBytes, getDownloadURL} from 'firebase/storage';
 
 /////// FIREBASE //////
 import firebaseApp from '../firebase/credenciales';
 import { getFirestore, updateDoc, doc} from 'firebase/firestore';
-import { getStorage} from 'firebase/storage';
+
 import { uid } from 'uid';
 import Swal from 'sweetalert2';
 import Comentarios from './Comentarios';
 import Spinner from '../components/Spinner';
-
-import moment from 'moment';
-
-
-
-
 
 
 const db = getFirestore(firebaseApp);
@@ -35,9 +29,25 @@ const NuevoComentario = ({despacho, enlaceID, usuario}) => {
         id: uid(),
         comentario: '',
         creador: usuario,
+        adjunto:'',
         creado: +new Date()
         
     })
+
+    ////// MANEJO DE ARCHIVOS /////
+    const [archivoComent, setArchivoComent] = useState('vacio')
+
+        let urlDescarga; 
+        let nuevosComentarios;
+    
+        const fileHandler = async e => {
+            // detectar archivo
+            await setArchivoComent(e.target.files[0]);
+            
+        }
+
+        
+    ///////////////////////////////////////
 
     const { comentario } = coment;
 
@@ -49,42 +59,92 @@ const NuevoComentario = ({despacho, enlaceID, usuario}) => {
             [e.target.name]: e.target.value,
 
         })
-
+        console.log(archivoComent)
     }
         
 
     const handleSubmit = async() => {
-
+        //////// SUBIENDO ARCHIVO //////
         if( coment.comentario === '' ) {
             Swal.fire({
                 icon: 'error',
                 title: 'Formulario Vacio',
                 text: 'No puede agregar un formulario vacio!',
                 timer: 3000
-              })
-            return;
-        } else {
-            
-            let nuevosComentarios = [...despacho.comentarios, coment];
-
-            try {
-                despacho.comentarios = nuevosComentarios;
-                await updateDoc(doc(db, `despachos/${enlaceID}`), despacho);
-
-            /* await updateDoc(doc(db, `despachos/${enlaceID}`), despacho.comentarios); */
-
-            } catch (error) {
-                console.log(error)
-            }
-
-            setOpen(false)
-
-            setComent({
-                ...coment,
-                comentario: '',
             })
+            return;
+        }
+        try {
+            if(archivoComent){
+                // cargar archivo a firebase storage
+                const archivoRef = ref(storage, `adjuntocoment/${archivoComent.name}`);
+                await uploadBytes(archivoRef, archivoComent)
+                await getDownloadURL(archivoRef).then(async(url) => {
+                    urlDescarga = url
+                }).catch((error)=>{
+                    console.log(error, 'No se pudo obtener url')
+                })
+
+                const asignarUrlComent = async()=>{
+                    await setComent({...coment, adjunto: urlDescarga})
+                    nuevosComentarios = [...despacho.comentarios, coment]
+
+                }
+
+                setTimeout(async() => {
+                    
+                    await asignarUrlComent();
+
+                    try {
+                        despacho.comentarios = nuevosComentarios;
+                        await updateDoc(doc(db, `despachos/${enlaceID}`), despacho);
+
+                    /* await updateDoc(doc(db, `despachos/${enlaceID}`), despacho.comentarios); */
+
+                    } catch (error) {
+                        console.log(error)
+                    }
+
+                    setOpen(false)
+
+                    setComent({
+                        ...coment,
+                        comentario: '',
+                    })
+                }, 3000);
+
+                
+
+ 
+            } else {
+                    
+                    let nuevosComentarios = [...despacho.comentarios, coment];
+
+                    try {
+                        despacho.comentarios = nuevosComentarios;
+                        await updateDoc(doc(db, `despachos/${enlaceID}`), despacho);
+
+                    /* await updateDoc(doc(db, `despachos/${enlaceID}`), despacho.comentarios); */
+
+                    } catch (error) {
+                        console.log(error)
+                    }
+
+                    setOpen(false)
+
+                    setComent({
+                        ...coment,
+                        comentario: '',
+                    })
 
 
+                }
+
+                ////////////////////////// fin ANIDADO ///////////////
+            }
+            
+         catch (error) {
+            console.log(error)
         }
 
         
@@ -153,28 +213,10 @@ const NuevoComentario = ({despacho, enlaceID, usuario}) => {
                             </textarea>
                         </div>
 
-                        
-
-
-                        {/* <select
-                            className='mt-2 border border-gray-150'
-                            name="creador"
-                            value={creador}
-                            onChange={handleComentario}
-                        >
-                            <option value="">-- Seleccione --</option>
-                            <option value="Sergio">Sergio</option>
-                            <option value="Johanna">Johanna</option>
-                            <option value="Jorge">Jorge</option>
-                            <option value="Darnel">Darnel</option>
-                            <option value="Maria">Maria</option>
-                            
-                        </select> */}
-
-                        {/* <div className='mt-4'>
+                        <div className='mt-4'>
                             <input 
                             type="file"
-                            onChange={leerArchivo}
+                            onChange={fileHandler}
                             className="block w-full text-sm text-gray-500
                             file:mr-4 file:py-2 file:px-4
                             file:rounded-full file:border-0
@@ -182,7 +224,7 @@ const NuevoComentario = ({despacho, enlaceID, usuario}) => {
                             file:bg-violet-50 file:text-orange-700
                             hover:file:bg-violet-100"
                         />
-                        </div> */}
+                        </div>
                     </div>
                     </div>
                 </div>
