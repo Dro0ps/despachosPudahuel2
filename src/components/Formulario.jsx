@@ -77,12 +77,9 @@ const Formulario = ({despacho, cargando}) => {
             console.log(error);
         }
 
-        navigate('/despachos/pendientes')//Redirecciona al usuario a otra ventana
+        navigate('/despachos')//Redirecciona al usuario a otra ventana
 
     }
-
-   
-
 
     return (
         cargando ? <Spinner/> : (

@@ -9,6 +9,7 @@ import styled from 'styled-components';
 import moment from 'moment';
 
 
+
 const Encabezado = styled.p`
     color: #bd4f23;
     font-weight: bold;
@@ -162,7 +163,9 @@ const Listado = () => {
 
         {
             name: <Encabezado>Acciones</Encabezado>,
-            cell: row => <Boton  onClick={() => {navigate(`/despachos/editar/${row.id}`)}}>Editar</Boton>,
+            cell: row => 
+            <Boton  onClick={() => {navigate(`/despachos/editar/${row.id}`)}}>Editar</Boton>
+            ,
             sortable: false,
             grow: 0,
             wrap: true
