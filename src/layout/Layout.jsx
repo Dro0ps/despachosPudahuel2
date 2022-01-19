@@ -38,16 +38,9 @@ const Layout = ({usuario}) => {
                         text-2xl block mt-2 font-extrabold hover:text-orange-300 transition-colors`}>
                         <FontAwesomeIcon className="mr-2" icon={faPlus}/>Nuevo
                     </Link>
-                    
-                    
+
 
                     <Link to="/despachos" className={`${urlActual === '/despachos' ? 'text-orange-300' : 'text-white'}
-                        text-2xl block mt-2 font-extrabold hover:text-orange-300 transition-colors`}>
-                        <FontAwesomeIcon className="mr-2" icon={faClipboardList}/>Listado
-                    </Link>
-
-
-                    <Link to="/despachos/pendientes" className={`${urlActual === '/despachos/pendientes' ? 'text-orange-300' : 'text-white'}
                         text-2xl block mt-2 font-extrabold hover:text-orange-300 transition-colors`}>
                         <FontAwesomeIcon className="mr-2" icon={faHourglassHalf}/>Pendientes
                     </Link>
@@ -62,6 +55,13 @@ const Layout = ({usuario}) => {
                         text-2xl block mt-2 font-extrabold hover:text-orange-300 transition-colors`}>
                         <FontAwesomeIcon className="mr-2" icon={faClipboardCheck}/>Confirmados
                     </Link>
+
+                    {usuario.rol !== 'bodega' &&
+                        <Link to="/despachos/listado" className={`${urlActual === '/despachos/listado' ? 'text-orange-300' : 'text-white'}
+                            text-2xl block mt-2 font-extrabold hover:text-orange-300 transition-colors`}>
+                            <FontAwesomeIcon className="mr-2" icon={faClipboardList}/>Listado
+                        </Link>
+                    }
 
                     {usuario && 
                     <h2 className="text-white mt-20 mb-10">Usuario: <p className="font-extrabold uppercase text-1xl">{usuario.nombre}</p></h2>

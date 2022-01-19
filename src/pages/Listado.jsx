@@ -36,7 +36,7 @@ moment.locale('es', {
 
 const db = getFirestore(firebaseApp);
 
-const Inicio = () => {
+const Listado = () => {
 
     moment.locale('es');
 
@@ -270,4 +270,4 @@ const Inicio = () => {
     )
 }
 
-export default Inicio
+export default Listado

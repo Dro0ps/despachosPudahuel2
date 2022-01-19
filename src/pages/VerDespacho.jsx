@@ -85,35 +85,58 @@ const VerDespacho = ({usuario}) => {
 
     //////// CAMBIOS DE ESTADO///////
     const estadoRecibido = () => {
-
-        despacho.recibido= true;
-        setDespacho({
-            ...despacho,
-            recibido: true
-        })
-        actualizaEstado(despacho);
+        if(usuario.rol === 'bodega'){
+            despacho.recibido= true;
+            setDespacho({
+                ...despacho,
+                recibido: true
+            })
+            actualizaEstado(despacho);
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Usted no tiene permitido cambiar este estado',
+              })
+        }
+        
     }
 
     const estadoDespachado = async() => {
-        despacho.despachado = true;
-        despacho.fecha_despachado = +new Date();
-        setDespacho({
-            ...despacho,
-            despachado: true,
-            fecha_despachado: +new Date()
-        })
-        actualizaEstado(despacho);
+        if(usuario.rol === 'bodega'){
+            despacho.despachado = true;
+            despacho.fecha_despachado = +new Date();
+            setDespacho({
+                ...despacho,
+                despachado: true,
+                fecha_despachado: +new Date()
+            })
+            actualizaEstado(despacho);
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Usted no tiene permitido cambiar este estado',
+            })
+        }
+        
     }
 
     const estadoConfirmado = async() => {
-        despacho.confirmado = true;
-        despacho.fecha_confirmado = +new Date();
-        setDespacho({
-            ...despacho,
-            confirmado: true,
-            fecha_confirmado: +new Date()
-        })
-        actualizaEstado(despacho);
+        if(usuario.rol === 'bodega'){
+            despacho.confirmado = true;
+            despacho.fecha_confirmado = +new Date();
+            setDespacho({
+                ...despacho,
+                confirmado: true,
+                fecha_confirmado: +new Date()
+            })
+            actualizaEstado(despacho);
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Usted no tiene permitido cambiar este estado',
+            })
+        }
+        
     }
 
     /////// ACTUALIZA EL ESTADO //////
@@ -123,10 +146,10 @@ const VerDespacho = ({usuario}) => {
 
 
     const alertaDespacho = () => {
-        Swal.fire('No puedes marcar Despachado sin indicar la Recepción')
+        Swal.fire({title:'Antes debes indicar recibido', icon: 'error'})
     }
     const alertaConfirmado = () => {
-        Swal.fire('No puedes marcar Confirmado sin indicar el Despacho')
+        Swal.fire({title: 'Antes debes indicar el Despacho', icon: 'error'})
     }
 
     return (

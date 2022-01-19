@@ -4,7 +4,7 @@ import IniciarSesion from './layout/IniciarSesion';
 import Layout from './layout/Layout';
 import EditarDespacho from './pages/EditarDespacho';
 import VerDespacho from './pages/VerDespacho';
-import Inicio from './pages/Inicio';
+import Listado from './pages/Listado';
 import LoginForm from './pages/LoginForm';
 import NuevoDespacho from './pages/NuevoDespacho';
 
@@ -109,9 +109,9 @@ function App() {
             />
             
             <Route path="/despachos" element={<Layout usuario={user}/>}>
-              <Route index element={<Inicio/>}/>
+              <Route index element={<Pendientes/>}/>
               <Route path="nuevo" element={<NuevoDespacho/>}/>
-              <Route path="pendientes" element={<Pendientes/>}/>
+              <Route path="listado" element={<Listado/>}/>
               <Route path="despachados" element={<Despachados/>}/>
               <Route path="confirmados" element={<Confirmados/>}/>
               <Route path="editar/:id" element={<EditarDespacho/>}/>

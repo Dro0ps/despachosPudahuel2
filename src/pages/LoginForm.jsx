@@ -11,6 +11,8 @@ import db from "../firebase/credenciales";
 import { doc, getFirestore, setDoc } from "firebase/firestore";
 import Loading from "../components/Loading";
 import { Outlet } from "react-router-dom";
+import Swal from "sweetalert2";
+
 
 const auth = getAuth(db);
 
@@ -18,6 +20,7 @@ const LoginForm = ({ usuario }) => {
   const firebaseApp = getFirestore(db);
 
   const [isRegister, setIsRegister] = useState(false);
+  const [errorSesion, setErrorSesion] = useState(null);
 
   const [user, setUser] = useState({
     email: "",
@@ -43,7 +46,6 @@ const LoginForm = ({ usuario }) => {
     ).then((usuarioFirebase) => {
       return usuarioFirebase;
     });
-    console.log(infoUsuario.user.uid);
     const docuRef = await doc(firebaseApp, "usuarios", infoUsuario.user.uid);
     await setDoc(docuRef, { nombre: nombre, rol: rol, email: email });
   };
@@ -54,8 +56,24 @@ const LoginForm = ({ usuario }) => {
     if (isRegister) {
       registrarUsuario(email, password, nombre, rol);
     } else {
-      const sesion = signInWithEmailAndPassword(auth, email, password);
-      console.log(sesion);
+      
+        await signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
+          // Signed in
+          setErrorSesion(null)
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          console.log(errorCode)
+          if( errorCode === 'auth/wrong-password' || 'auth/user-not-found') {
+            setErrorSesion('Usuario o Contraseña Incorrecta')
+          }
+          if( errorCode === 'auth/too-many-requests') {
+            setErrorSesion('Demasiados Intentos Erroneos, Usuario Bloqueado!!!')
+          }
+          /* console.log(errorCode, 'Hola', errorMessage) */
+        })
+
+
     }
   }
 
@@ -133,7 +151,9 @@ const LoginForm = ({ usuario }) => {
                     placeholder="Password"
                     onChange={handleChange}
                   />
+                  {errorSesion && <p className=" font-bold  text-red-600 text-center">{errorSesion}</p>}
                 </div>
+                
                 <div>
                   {isRegister && (
                     <select
