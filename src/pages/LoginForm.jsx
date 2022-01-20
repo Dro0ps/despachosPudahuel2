@@ -169,7 +169,6 @@ const LoginForm = ({ usuario }) => {
                       <option value="">-- Seleccione Rol del Usuario --</option>
                       <option value="vendedor">vendedor</option>
                       <option value="bodega">bodega</option>
-                      <option value="administrador">administrador</option>
                     </select>
                   )}
                 </div>
