@@ -134,7 +134,7 @@ const VerDespacho = ({usuario}) => {
 
 
     const alertaDespacho = () => {
-        Swal.fire({title:'Antes debes indicar recibido', icon: 'error'})
+        Swal.fire({title:'Antes debes indicar Recibido', icon: 'error'})
     }
     const alertaConfirmado = () => {
         Swal.fire({title: 'Antes debes indicar el Despacho', icon: 'error'})

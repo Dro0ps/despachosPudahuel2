@@ -24,6 +24,7 @@ const NuevoComentario = ({despacho, enlaceID, usuario}) => {
     
 
     const [open, setOpen] = useState(false)
+    const [cargando, setCargando] = useState(false);
 
     const [coment, setComent] = useState({
         id: uid(),
@@ -34,37 +35,52 @@ const NuevoComentario = ({despacho, enlaceID, usuario}) => {
         
     })
 
+    const { comentario } = coment;
+
     ////// MANEJO DE ARCHIVOS /////
     const [archivoComent, setArchivoComent] = useState('vacio')
 
-        let urlDescarga; 
-        let nuevosComentarios;
+        let archivoRef;
     
         const fileHandler = async e => {
             // detectar archivo
             await setArchivoComent(e.target.files[0]);
-            
+        
+            console.log(archivoComent)
+            // SUBE ADJUNTO A FIREBASE Y EXTRAE LA URL
+            archivoRef = ref(storage, `adjuntocoment/${archivoComent.name}`);
+            await uploadBytes(archivoRef, archivoComent)
+            await getDownloadURL(archivoRef).then((url) => {
+                setComent({
+                    ...coment,
+                    adjunto: url
+                })
+                
+            }).catch((error)=>{
+                console.log(error, 'No se pudo obtener url')
+            })
+
+            console.log(coment)
+    
         }
 
         
     ///////////////////////////////////////
 
-    const { comentario } = coment;
+    const handleComentario =  async e => {
 
-
-    const handleComentario =  e => {
-
-         setComent({
+         await setComent({
             ...coment,
             [e.target.name]: e.target.value,
 
         })
-        console.log(archivoComent)
+        console.log(coment)
+        
     }
         
 
     const handleSubmit = async() => {
-        //////// SUBIENDO ARCHIVO //////
+        
         if( coment.comentario === '' ) {
             Swal.fire({
                 icon: 'error',
@@ -74,80 +90,43 @@ const NuevoComentario = ({despacho, enlaceID, usuario}) => {
             })
             return;
         }
-        try {
-            if(archivoComent){
-                // cargar archivo a firebase storage
-                const archivoRef = ref(storage, `adjuntocoment/${archivoComent.name}`);
-                await uploadBytes(archivoRef, archivoComent)
-                await getDownloadURL(archivoRef).then(async(url) => {
-                    urlDescarga = url
-                }).catch((error)=>{
-                    console.log(error, 'No se pudo obtener url')
-                })
-
-                const asignarUrlComent = async()=>{
-                    await setComent({...coment, adjunto: urlDescarga})
-                    nuevosComentarios = [...despacho.comentarios, coment]
-
-                }
-
-                await asignarUrlComent();
-
-                try {
-                    despacho.comentarios = nuevosComentarios;
-                    await updateDoc(doc(db, `despachos/${enlaceID}`), despacho);
-
-                /* await updateDoc(doc(db, `despachos/${enlaceID}`), despacho.comentarios); */
-
-                } catch (error) {
-                    console.log(error)
-                }
-
-                setOpen(false)
-
-                setComent({
-                    ...coment,
-                    comentario: '',
-                })
-                
-
-                
-
- 
-            } else {
-                    
-                    let nuevosComentarios = [...despacho.comentarios, coment];
-
-                    try {
-                        despacho.comentarios = nuevosComentarios;
-                        await updateDoc(doc(db, `despachos/${enlaceID}`), despacho);
-
-                    /* await updateDoc(doc(db, `despachos/${enlaceID}`), despacho.comentarios); */
-
-                    } catch (error) {
-                        console.log(error)
-                    }
-
-                    setOpen(false)
-
-                    setComent({
-                        ...coment,
-                        comentario: '',
-                    })
 
 
-                }
+    
+        let nuevosComentarios = [...despacho.comentarios, coment];
 
-                ////////////////////////// fin ANIDADO ///////////////
+        setCargando(true);
+
+        setTimeout(() => {
+            try {
+                despacho.comentarios = nuevosComentarios;
+                updateDoc(doc(db, `despachos/${enlaceID}`), despacho);
+                setCargando(false)
+
+            } catch (error) {
+                console.log(error)
+                return
             }
+
             
-         catch (error) {
-            console.log(error)
-        }
+        }, 3000);
+       
+
+        setOpen(false)
+
+        setComent({
+            ...coment,
+            comentario: '',
+            adjunto: ''
+        })
+
+    }
+            
+        
 
         
 
-    }
+    
         
     const AbreFormulario = () => {
         
@@ -157,6 +136,7 @@ const NuevoComentario = ({despacho, enlaceID, usuario}) => {
 
     return (
         <>
+        
         <button className="m-2 text-1xl mt-4 uppercase max-w-lg text-gray-600" onClick={AbreFormulario}>
             Agregar Comentario <FontAwesomeIcon className="text-2xl mt-4 text-gray-600" icon={faComments} />
         </button>
@@ -189,18 +169,20 @@ const NuevoComentario = ({despacho, enlaceID, usuario}) => {
                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
                 <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                
                 <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <div className="sm:flex sm:items-start">
                     <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12  sm:mx-0 sm:h-10 sm:w-10">
                         <AnnotationIcon className="h-8 w-8 text-orange-400 " aria-hidden="true" />
                     </div>
                     <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                    
                         <Dialog.Title as="h3" className="text-lg leading-6 font-medium uppercase mb-5 text-gray-900">
-                        Agrega un Comentario
+                        Agrega un Comentario 
                         </Dialog.Title>
 
                         <div className="mt-2 border border-gray-150">
-                            <textarea 
+                        <textarea 
                                 className=' block w-full h-40 p-3 ' 
                                 name="comentario" 
                                 id="comentario" 
@@ -241,7 +223,7 @@ const NuevoComentario = ({despacho, enlaceID, usuario}) => {
                           
                           onClick={handleSubmit}
                         >
-                        Agregar Comentario
+                        Agregar Comentario 
                         </button>
 
                         :
@@ -254,10 +236,12 @@ const NuevoComentario = ({despacho, enlaceID, usuario}) => {
                           sm:w-auto sm:text-sm"
                           
                         >
-                        Agregar Comentario
+                        Agregar Comentario 
                         </button>
 
                     }
+
+                    {cargando && <Spinner/>}
                     
                     <button
                     type="button"

@@ -1,6 +1,6 @@
 .sk-chase {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     position: relative;
     animation: sk-chase 2.5s infinite linear both;
     margin: 0 auto;
@@ -20,7 +20,7 @@
     display: block;
     width: 25%;
     height: 25%;
-    background-color: #1F3A8A;
+    background-color: #ea580c;
     border-radius: 100%;
     animation: sk-chase-dot-before 2.0s infinite ease-in-out both; 
   }
