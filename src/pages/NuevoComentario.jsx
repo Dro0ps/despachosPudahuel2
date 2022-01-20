@@ -91,27 +91,25 @@ const NuevoComentario = ({despacho, enlaceID, usuario}) => {
 
                 }
 
-                setTimeout(async() => {
-                    
-                    await asignarUrlComent();
+                await asignarUrlComent();
 
-                    try {
-                        despacho.comentarios = nuevosComentarios;
-                        await updateDoc(doc(db, `despachos/${enlaceID}`), despacho);
+                try {
+                    despacho.comentarios = nuevosComentarios;
+                    await updateDoc(doc(db, `despachos/${enlaceID}`), despacho);
 
-                    /* await updateDoc(doc(db, `despachos/${enlaceID}`), despacho.comentarios); */
+                /* await updateDoc(doc(db, `despachos/${enlaceID}`), despacho.comentarios); */
 
-                    } catch (error) {
-                        console.log(error)
-                    }
+                } catch (error) {
+                    console.log(error)
+                }
 
-                    setOpen(false)
+                setOpen(false)
 
-                    setComent({
-                        ...coment,
-                        comentario: '',
-                    })
-                }, 3000);
+                setComent({
+                    ...coment,
+                    comentario: '',
+                })
+                
 
                 
 
