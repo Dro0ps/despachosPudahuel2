@@ -11,7 +11,7 @@ import { getStorage, ref, uploadBytes, getDownloadURL} from 'firebase/storage';
 const db = getFirestore(firebaseApp);
 const storage = getStorage(firebaseApp);
 
-const Formulario = ({despacho, cargando}) => {
+const Formulario = ({despacho, cargando, usuario}) => {
 
     const navigate = useNavigate();
     
@@ -91,6 +91,7 @@ const Formulario = ({despacho, cargando}) => {
             <Formik
                 initialValues={{
                     creado: +new Date(),
+                    creador: usuario,
                     recibido: despacho?.recibido ?? false,
                     despachado: despacho?.despachado ?? false,
                     confirmado: despacho?.confirmado ?? false,

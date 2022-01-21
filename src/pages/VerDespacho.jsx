@@ -35,6 +35,7 @@ const VerDespacho = ({usuario}) => {
     //////////////Escucha del servidor////////////////
 
     const {
+        creador,
         nombre,
         creado,
         direccion,
@@ -88,6 +89,8 @@ const VerDespacho = ({usuario}) => {
         }
         
     }
+
+    
 
     const estadoDespachado = async() => {
         if(usuario.rol === 'bodega'){
@@ -151,21 +154,13 @@ const VerDespacho = ({usuario}) => {
             { despacho ?
             <>
             <h1 className="text-4xl font font-extrabold tracking-tight text-gray-700 sm:text-4xl" >{nombre}</h1>
-            <p className="mt-4 text-xl text-gray-500">Detalles de la Orden </p>
+            
 
-                 {documento && 
-                <p className="text-2xl mt-4 text-gray-600">
-                    <span className="text-gray-500 uppercase font-bold">n° documento: </span>
-                    {documento}
-                </p>
+                {documento && 
+                <p className="mt-4 text-2xl text-gray-500">Detalles de la Orden: {documento}</p>
                 }
 
-                {creado && 
-                <p className="text-2xl mt-4 text-gray-600">
-                    <span className="text-gray-500 uppercase font-bold">Creado el: </span>
-                    {`${moment(creado).format('Do MMMM  YYYY, h:mm:ss a')}`}
-                </p>
-                }
+                
 
                 {direccion && 
                 <p className="text-2xl mt-4 text-gray-600">
@@ -181,6 +176,13 @@ const VerDespacho = ({usuario}) => {
                     <span className="text-gray-500 uppercase font-bold">Descripción: </span>
                     {notas}
                 </p> }
+
+                {creado && 
+                <p className="text-2xl mt-4 text-gray-600">
+                    <span className="text-gray-500 uppercase font-bold">Creado por: </span><p>{creador.usuario.nombre}</p>
+                    <p>el {`${moment(creado).format('Do MMMM  YYYY, h:mm:ss a')}`}</p>
+                </p>
+                }
 
                 {fecha_despachado &&
                 <p className="text-2xl mt-4 text-gray-600">
@@ -325,9 +327,6 @@ const VerDespacho = ({usuario}) => {
                 usuario = {usuario}
 
             />
-
-           
-            
         </div>
         </div>
         

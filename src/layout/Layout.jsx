@@ -19,8 +19,9 @@ const Layout = ({usuario}) => {
         signOut(auth)
     }
 
-    
+
     return (
+        
         <div className="md:flex md:min-h-screen">
 
             <div className="md:w-1/4 bg-orange-900 px-5 py-10 flex flex-col justify-between">
@@ -68,33 +69,22 @@ const Layout = ({usuario}) => {
                     }
                     
 
-                    
-
-
-
                 </nav>
 
 
             </div>
 
-
-            
             
                 <button 
                     className='text-1xl font-extrabold text-center text-white hover:text-orange-300 transition-colors' 
                     onClick={cerrarSesion}><FontAwesomeIcon className="mr-2" icon={faSignOutAlt}/>Cerrar Sesión
                 </button>
             
-  
-            
-                
-                
             </div>
 
             <div className="md:w-3/4 p-10 md:h-screen overflow-scroll">
                 <Outlet/>
             </div>
-
             
         </div>
     )

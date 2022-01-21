@@ -93,7 +93,7 @@ const Pendientes = () => {
         },
         {
             name: <Encabezado>Nombre del Cliente</Encabezado>,
-            selector: row => row.nombre,
+            selector: row => <p className=' font-bold text-black-900 uppercase'>{row.nombre}</p>,
             sortable: true,
             grow: 0.6,
             wrap: true
@@ -119,7 +119,8 @@ const Pendientes = () => {
         },
         {
             name: <Encabezado>Creado</Encabezado>,
-            selector: row => moment(row.creado).format('Do MMMM  YYYY, h:mm:ss a'),
+            selector: row => <p className=' font-bold text-black-900'>{row.creador.usuario.nombre}  
+            <p className=' font-light'>{moment(row.creado).format('Do MMMM  YYYY, h:mm:ss a')}</p></p>,
             sortable: true,
             omit: false,
             wrap: true,
