@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 /* import Despacho from '../components/Despacho'; */
-import { collection, query, getDocs, getFirestore, doc, deleteDoc } from "firebase/firestore";
+import { collection, query, getDocs, getFirestore, doc, deleteDoc, onSnapshot } from "firebase/firestore";
 import firebaseApp from '../firebase/credenciales';
 import DataTable from 'react-data-table-component';
 import { Component } from 'react/cjs/react.production.min';
@@ -36,7 +36,7 @@ moment.locale('es', {
   );
 
 
-const db = getFirestore(firebaseApp);
+const firestore = getFirestore(firebaseApp);
 
 const Listado = ({usuario}) => {
 
@@ -54,7 +54,7 @@ const Listado = ({usuario}) => {
         const obtenerDespachosApi = async () => {
             try {
                 //Como llamar documentos y listarlos en Firebase IMPORTANTE
-                const q = query(collection(db,"despachos"));
+                const q = query(collection(firestore,"despachos"));
                 const querySnapshot = await getDocs(q);
                 
                 const resultado = [];
@@ -78,13 +78,24 @@ const Listado = ({usuario}) => {
                 console.log(error)
             }
         }
+        const escucha = query(collection(firestore,"despachos"))
+        onSnapshot(escucha,(querySnapshot) => {
+            const result = [];
+            querySnapshot.forEach((doc) => {
+                result.push(doc.data());
+            })
+            obtenerDespachosApi();
+
+            /* console.log("los datos son: ",result.join(", "))
+            */
+        })
         obtenerDespachosApi();
     }, [])
 
     const handleEliminar = async id => {
         
             try {
-                await deleteDoc(doc(db, `despachos/${id}`))
+                await deleteDoc(doc(firestore, `despachos/${id}`))
 
                 // Elimina del state el despacho eliminado de la api y lo actualiza
                 // llama todos los despachos que sean diferentes al id seleccionado para eliminarlo del state
@@ -97,7 +108,7 @@ const Listado = ({usuario}) => {
         
     }
 
-    console.log(usuario.rol)
+    
 
     const columnas = [
         

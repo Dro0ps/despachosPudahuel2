@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { collection, query, getDocs, getFirestore, doc, deleteDoc, where } from "firebase/firestore";
+import { collection, query, getDocs, getFirestore, doc, deleteDoc, where, onSnapshot } from "firebase/firestore";
 import db from '../firebase/credenciales';
 import DataTable from 'react-data-table-component';
 import { Component } from 'react/cjs/react.production.min';
@@ -35,6 +35,7 @@ moment.locale('es', {
   }
   );
 
+
 const Pendientes = () => {
 
     moment.locale('es');
@@ -43,6 +44,10 @@ const Pendientes = () => {
 
     const [despachos, setDespachos] = useState([]);
     const [pending, setPending] = useState(true)
+
+
+    
+    
 
 
     useEffect(() => {
@@ -69,10 +74,24 @@ const Pendientes = () => {
                     setPending(false);
                 }
 
+                console.log(resultado)
+
             } catch (error) {
                 console.log(error)
             }
         }
+
+        const escucha = query(collection(firestore,"despachos"), where("despachado","==",false))
+        onSnapshot(escucha,(querySnapshot) => {
+            const result = [];
+            querySnapshot.forEach((doc) => {
+                result.push(doc.data());
+            })
+            obtenerDespachosApi();
+
+            /* console.log("los datos son: ",result.join(", "))
+            */
+        })
         obtenerDespachosApi();
     }, [])
 
