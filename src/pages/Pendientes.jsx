@@ -83,11 +83,11 @@ const Pendientes = () => {
 
         const escucha = query(collection(firestore,"despachos"), where("despachado","==",false))
         onSnapshot(escucha,(querySnapshot) => {
-            const result = [];
-            querySnapshot.forEach((doc) => {
-                result.push(doc.data());
+            
+            querySnapshot.forEach(() => {
+                obtenerDespachosApi();
             })
-            obtenerDespachosApi();
+            
 
             /* console.log("los datos son: ",result.join(", "))
             */
