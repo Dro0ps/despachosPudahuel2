@@ -1,5 +1,6 @@
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
+import {useState} from 'react';
 import Alerta from './Alerta';
 import { useNavigate, useParams } from 'react-router-dom'; // para redireccionar
 import Spinner from './Spinner';
@@ -13,6 +14,8 @@ const storage = getStorage(firebaseApp);
 const FormularioEdicion = ({despacho, cargando}) => {
     const navigate = useNavigate();
     const {id: enlaceID} = useParams();
+
+    const [spiner, setSpiner] = useState(false);
 
     // Definimos la forma que tendran los datos recibidos por el formulario con yup y shape
     const nuevoClienteSchema = Yup.object().shape({
@@ -44,6 +47,8 @@ const FormularioEdicion = ({despacho, cargando}) => {
    console.log(archivoLocal)
 
     const handleSubmit = async (valores) => {
+
+        setSpiner(true);
         try {
 
             if(archivoLocal) {
@@ -72,15 +77,10 @@ const FormularioEdicion = ({despacho, cargando}) => {
             console.log(error);
         }
 
+        setSpiner(false);
+
         navigate('/despachos')//Redirecciona al usuario a otra ventana
     } 
-
-                
-            
-                
-
-        
-    
 
     console.log(cargando);
 
@@ -191,17 +191,20 @@ const FormularioEdicion = ({despacho, cargando}) => {
                         }
                     </div>
 
-                    <div className='mb-4'>
+                    <div className='mb-4 flex justify-items-start'>
                     <input 
                         type="file"
                         onChange={fileHandler}
-                        className="block w-full text-sm text-gray-500
+                        className="block w-auto text-sm text-gray-500
                         file:mr-4 file:py-2 file:px-4
                         file:rounded-full file:border-0
                         file:text-sm file:font-semibold
                         file:bg-violet-50 file:text-orange-700
                         hover:file:bg-violet-100"
                     />
+
+                    { spiner && <Spinner/> }
+
                     </div>
 
                     <input

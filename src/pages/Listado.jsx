@@ -141,7 +141,7 @@ const Listado = () => {
         {
             name: <Encabezado>Creado</Encabezado>,
             selector: row => <p className=' font-bold text-black-900'>{row.creador.usuario.nombre}  
-            <p className=' font-light'>{moment(row.creado).format('Do MMMM  YYYY, h:mm:ss a')}</p></p>,
+            <span className=' font-light'>{' el '}{moment(row.creado).format('Do MMMM  YYYY, h:mm:ss a')}</span></p>,
             sortable: true,
             omit: false,
             wrap: true,

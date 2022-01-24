@@ -6,12 +6,15 @@ import Spinner from './Spinner';
 import firebaseApp from '../firebase/credenciales';
 import { getFirestore, addDoc, collection} from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL} from 'firebase/storage';
+import {useState} from 'react';
 
 
 const db = getFirestore(firebaseApp);
 const storage = getStorage(firebaseApp);
 
 const Formulario = ({despacho, cargando, usuario}) => {
+
+    const [spiner, setSpiner] = useState(false);
 
     const navigate = useNavigate();
     
@@ -35,6 +38,8 @@ const Formulario = ({despacho, cargando, usuario}) => {
     }
 
     const handleSubmit = async (valores) => {
+
+        setSpiner(true);
 
         try {
                 
@@ -76,6 +81,8 @@ const Formulario = ({despacho, cargando, usuario}) => {
         } catch (error) {
             console.log(error);
         }
+
+        setSpiner(false);
 
         navigate('/despachos')//Redirecciona al usuario a otra ventana
 
@@ -190,17 +197,20 @@ const Formulario = ({despacho, cargando, usuario}) => {
                         }
                     </div>
 
-                    <div className='mb-4'>
+                    <div className='mb-4 flex justify-items-start'>
                     <input 
                         type="file"
                         onChange={fileHandler}
-                        className="block w-full text-sm text-gray-500
+                        className="block w-auto text-sm text-gray-500
                         file:mr-4 file:py-2 file:px-4
                         file:rounded-full file:border-0
                         file:text-sm file:font-semibold
                         file:bg-violet-50 file:text-orange-700
                         hover:file:bg-violet-100"
                     />
+
+                    { spiner && <Spinner/> }
+
                     </div>
 
                     <input
