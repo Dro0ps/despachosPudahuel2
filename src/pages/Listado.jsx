@@ -7,6 +7,7 @@ import { Component } from 'react/cjs/react.production.min';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import moment from 'moment';
+import EditarDespacho from './EditarDespacho';
 
 
 
@@ -37,7 +38,7 @@ moment.locale('es', {
 
 const db = getFirestore(firebaseApp);
 
-const Listado = () => {
+const Listado = ({usuario}) => {
 
     moment.locale('es');
 
@@ -81,9 +82,7 @@ const Listado = () => {
     }, [])
 
     const handleEliminar = async id => {
-        const confirmar = confirm('¿Deseas eliminar este cliente?')
-
-        if(confirmar) {
+        
             try {
                 await deleteDoc(doc(db, `despachos/${id}`))
 
@@ -95,11 +94,10 @@ const Listado = () => {
             } catch (error) {
                 console.log(error);
             }
-        }
+        
     }
 
-    /* onClick={() => {navigate(`/despachos/editar/${id}`)}} */
-
+    console.log(usuario.rol)
 
     const columnas = [
         
@@ -164,8 +162,74 @@ const Listado = () => {
 
         {
             name: <Encabezado>Acciones</Encabezado>,
-            cell: row => 
-            <Boton  onClick={() => {navigate(`/despachos/editar/${row.id}`)}}>Editar</Boton>
+            cell: row => <div>
+            {<Boton onClick={() => {navigate(`/despachos/editar/${row.id}`)}}>Editar</Boton>}
+
+            { (usuario.rol === 'admin') && <Boton  
+                onClick={ () =>{
+                    if ( row.despachado=== true){
+                        Swal.fire({
+                            title: 'NO SE DEBEN ELIMINAR REGISTROS YA DESPACHADOS!',
+                            text: "¿ESTAS SEGURO?",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Si, Eliminalo!'
+                          }).then((result) => {
+                            if (result.isConfirmed) {
+                                Swal.fire({
+                                    title: 'Estas seguro?',
+                                    text: `Deseas Eliminar el Registro ${row.documento} ?`,
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'Si, Estoy Seguro'
+                                  }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        handleEliminar(row.id)
+                                        Swal.fire(
+                                            `Registro #${row.documento}`,
+                                            'Ha sido eliminado.',
+                                            'success'
+                                          )
+                                          
+                                    }
+                                  })
+                            }
+                          })
+                    } else {
+                        Swal.fire({
+                            title: 'Estas seguro?',
+                            text: `Deseas Eliminar el Registro ${row.documento} ?`,
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Si, Estoy Seguro'
+                          }).then((result) => {
+                            if (result.isConfirmed) {
+                                handleEliminar(row.id)
+                                Swal.fire(
+                                    `Registro #${row.documento}`,
+                                    'Ha sido eliminado.',
+                                    'success'
+                                  )
+                                  
+                            }
+                          })
+
+                    }
+
+                   
+                    
+                }}
+            
+            >Eliminar</Boton>}
+
+            </div>
+            
             ,
             sortable: false,
             grow: 0,

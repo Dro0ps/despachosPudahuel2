@@ -112,7 +112,7 @@ const VerDespacho = ({usuario}) => {
     }
 
     const estadoConfirmado = async() => {
-        if(usuario.rol === 'bodega'){
+        if(usuario.rol === 'vendedor'){
             despacho.confirmado = true;
             despacho.fecha_confirmado = +new Date();
             setDespacho({

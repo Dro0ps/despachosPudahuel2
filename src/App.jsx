@@ -111,7 +111,7 @@ function App() {
             <Route path="/despachos" element={<Layout usuario={user}/>}>
               <Route index element={<Pendientes/>}/>
               <Route path="nuevo" element={<NuevoDespacho usuario={user}/>}/>
-              <Route path="listado" element={<Listado/>}/>
+              <Route path="listado" element={<Listado usuario={user}/>}/>
               <Route path="despachados" element={<Despachados/>}/>
               <Route path="confirmados" element={<Confirmados/>}/>
               <Route path="editar/:id" element={<EditarDespacho/>}/>

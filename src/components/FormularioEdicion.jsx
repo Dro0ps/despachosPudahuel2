@@ -79,7 +79,7 @@ const FormularioEdicion = ({despacho, cargando}) => {
 
         setSpiner(false);
 
-        navigate('/despachos')//Redirecciona al usuario a otra ventana
+        navigate('/despachos/listado')//Redirecciona al usuario a otra ventana
     } 
 
     console.log(cargando);
@@ -207,12 +207,23 @@ const FormularioEdicion = ({despacho, cargando}) => {
 
                     </div>
 
+                    { spiner ? 
+                    
+                    <input
+                        type='submit'
+                        value={ despacho?.nombre ? 'Editar' : 'Agregar Despacho'}
+                        className='mt-5 w-full bg-gray-800 p-3 text-white uppercase font-bold text-lg
+                         cursor-pointer '
+                    />
+                    :
                     <input
                         type='submit'
                         value={ despacho?.nombre ? 'Editar' : 'Agregar Despacho'}
                         className='mt-5 w-full bg-orange-800 p-3 text-white uppercase font-bold text-lg
                          cursor-pointer hover:text-orange-300 transition-colors'
                     />
+                    
+                    }
                     
                     
                     
