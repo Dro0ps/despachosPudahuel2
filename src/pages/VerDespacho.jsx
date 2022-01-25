@@ -8,6 +8,7 @@ import {
     getDoc, 
     doc, 
     updateDoc, 
+    onSnapshot
 } from "firebase/firestore";
 
 import firebaseApp from "../firebase/credenciales";
@@ -66,9 +67,12 @@ const VerDespacho = ({usuario}) => {
             } catch (error) {
                 console.log(error)
             }
-
+            
             setCargando(false);
         }
+
+        
+
         obtenerClienteAPI();
     }, [])
 
@@ -160,7 +164,6 @@ const VerDespacho = ({usuario}) => {
                 <p className="mt-4 text-2xl text-gray-500">Detalles de la Orden: {documento}</p>
                 }
 
-                
 
                 {direccion && 
                 <p className="text-2xl mt-4 text-gray-600">
@@ -179,7 +182,7 @@ const VerDespacho = ({usuario}) => {
 
                 {creado && 
                 <p className="text-2xl mt-4 text-gray-600">
-                    <span className="text-gray-500 uppercase font-bold">Creado por: </span><p>{creador.usuario.nombre}</p>
+                    <span className="text-gray-500 uppercase font-bold">Creado por: </span><span>{creador.usuario.nombre}</span>
                     <span>el {`${moment(creado).format('Do MMMM  YYYY, h:mm:ss a')}`}</span>
                 </p>
                 }

@@ -7,10 +7,9 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 /////// FIREBASE //////
 import firebaseApp from "../firebase/credenciales";
-import { getFirestore, updateDoc, doc } from "firebase/firestore";
+import { getFirestore, updateDoc, doc,  } from "firebase/firestore";
 
 import { Formik, Form, Field } from "formik";
-import * as Yup from "yup";
 import { uid } from "uid";
 import Swal from "sweetalert2";
 import Comentarios from "./Comentarios";
@@ -22,8 +21,6 @@ const storage = getStorage(firebaseApp);
 const NuevoComentario = ({ despacho, enlaceID, usuario }) => {
   const [open, setOpen] = useState(false);
   const [cargando, setCargando] = useState(false);
-
-  
 
 
   const AbreFormulario = () => {

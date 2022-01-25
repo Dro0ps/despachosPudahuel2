@@ -7,12 +7,14 @@ import {
   signInWithRedirect,
 } from "firebase/auth";
 
+import "../styles/Spinner.css";
+
 import db from "../firebase/credenciales";
 import { doc, getFirestore, setDoc } from "firebase/firestore";
 import Loading from "../components/Loading";
 import { Outlet } from "react-router-dom";
 import Swal from "sweetalert2";
-
+import Spinner from "../components/Spinner";
 
 const auth = getAuth(db);
 
@@ -21,6 +23,11 @@ const LoginForm = ({ usuario }) => {
 
   const [isRegister, setIsRegister] = useState(false);
   const [errorSesion, setErrorSesion] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  setTimeout(() => {
+    setLoading(false);
+  }, 2000);
 
   const [user, setUser] = useState({
     email: "",
@@ -56,24 +63,24 @@ const LoginForm = ({ usuario }) => {
     if (isRegister) {
       registrarUsuario(email, password, nombre, rol);
     } else {
-      
-        await signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
+      await signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
           // Signed in
-          setErrorSesion(null)
+          setErrorSesion(null);
         })
         .catch((error) => {
           const errorCode = error.code;
-          console.log(errorCode)
-          if( errorCode === 'auth/wrong-password' || 'auth/user-not-found') {
-            setErrorSesion('Usuario o Contraseña Incorrecta')
+          console.log(errorCode);
+          if (errorCode === "auth/wrong-password" || "auth/user-not-found") {
+            setErrorSesion("Usuario o Contraseña Incorrecta");
           }
-          if( errorCode === 'auth/too-many-requests') {
-            setErrorSesion('Demasiados Intentos Erroneos, Usuario Bloqueado!!!')
+          if (errorCode === "auth/too-many-requests") {
+            setErrorSesion(
+              "Demasiados Intentos Erroneos, Usuario Bloqueado!!!"
+            );
           }
           /* console.log(errorCode, 'Hola', errorMessage) */
-        })
-
-
+        });
     }
   }
 
@@ -87,7 +94,25 @@ const LoginForm = ({ usuario }) => {
 
   return (
     <>
-  
+      {loading ? (
+        <div className="padre centrado">
+          <div className="lds-spinner paddingTop">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          </div>
+      </div>
+        
+      ) : (
         <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
           <div className="max-w-md w-full space-y-8">
             <div>
@@ -112,8 +137,8 @@ const LoginForm = ({ usuario }) => {
                       autoComplete="nombre"
                       required
                       className="appearance-none rounded-none relative block w-full px-3 py-2 border 
-                      border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none 
-                      focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
+                  border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none 
+                  focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
                       placeholder="Nombre de Usuario"
                       onChange={handleChange}
                     />
@@ -129,8 +154,8 @@ const LoginForm = ({ usuario }) => {
                     autoComplete="email"
                     required
                     className="appearance-none rounded-none relative block w-full px-3 py-2 border
-                    border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none 
-                    focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
+                border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none 
+                focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
                     placeholder="Correo"
                     onChange={handleChange}
                   />
@@ -146,21 +171,25 @@ const LoginForm = ({ usuario }) => {
                     value={password}
                     required
                     className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 
-                            placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-orange-500 
-                            focus:border-orange-500 focus:z-10 sm:text-sm"
+                        placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-orange-500 
+                        focus:border-orange-500 focus:z-10 sm:text-sm"
                     placeholder="Password"
                     onChange={handleChange}
                   />
-                  {errorSesion && <p className=" font-bold  text-red-600 text-center">{errorSesion}</p>}
+                  {errorSesion && (
+                    <p className=" font-bold  text-red-600 text-center">
+                      {errorSesion}
+                    </p>
+                  )}
                 </div>
-                
+
                 <div>
                   {isRegister && (
                     <select
                       required
                       className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 
-                              placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none 
-                              focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
+                          placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none 
+                          focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
                       name="rol"
                       id="rol"
                       value={rol}
@@ -178,8 +207,8 @@ const LoginForm = ({ usuario }) => {
                 <button
                   type="submit"
                   className="group relative w-full flex justify-center py-2 px-4 border border-transparent 
-                          text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 
-                          focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+                      text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 
+                      focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
                 >
                   <span className="absolute left-0 inset-y-0 flex items-center pl-3">
                     <LockClosedIcon
@@ -205,7 +234,7 @@ const LoginForm = ({ usuario }) => {
             </form>
           </div>
         </div>
-      
+      )}
     </>
   );
 };

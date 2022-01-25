@@ -76,13 +76,8 @@ const Despachados = () => {
         }
 
         const escucha = query(collection(firestore,"despachos"))
-        onSnapshot(escucha,(querySnapshot) => {
-            const result = [];
-            querySnapshot.forEach((doc) => {
-                result.push(doc.data());
-            })
+        onSnapshot(escucha,() => {
             obtenerDespachosApi();
-
             /* console.log("los datos son: ",result.join(", "))
             */
         })

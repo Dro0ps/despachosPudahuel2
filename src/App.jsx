@@ -36,6 +36,8 @@ function App() {
 
   const [usuarioGlobal, setUsuarioGlobal] = useState(true);
   const [ user, setUser ] = useState(null);
+  
+
 
   const obtenerUser = async(uid) => {
     const docuRef = doc(firestore, `usuarios/${uid}`);
@@ -79,10 +81,11 @@ function App() {
   }, [])
 
   
+  
+  
 
   return (
     <>
-    
       <BrowserRouter >
         <Routes>
           { !usuarioGlobal ? 
