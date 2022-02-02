@@ -35,7 +35,7 @@ build/Release
 # Dependency directories
 node_modules/
 jspm_packages/
-src/firebase/credenciales.jsx
+src/firebase/credenciales.js
 dist/*
 
 # TypeScript v1 declaration files
