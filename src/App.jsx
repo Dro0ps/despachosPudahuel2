@@ -27,9 +27,6 @@ const auth = getAuth(db);
  const firestore = getFirestore(db);
 
 
-
-
-
 function App() {
 
   /* console.log(import.meta.env); */

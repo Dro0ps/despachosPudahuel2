@@ -219,7 +219,7 @@ const LoginForm = ({ usuario }) => {
                   {!isRegister ? "Iniciar Sesión" : "Registrarse"}
                 </button>
 
-                <div className=" mt-4">
+                {/* <div className=" mt-4">
                   {!isRegister ? (
                     <button onClick={activaRegistro}>
                       ¿Quieres Registrarse?
@@ -229,7 +229,7 @@ const LoginForm = ({ usuario }) => {
                       ¿Quieres Iniciar Sesión?
                     </button>
                   )}
-                </div>
+                </div> */}
               </div>
             </form>
           </div>
