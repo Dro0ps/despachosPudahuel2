@@ -37,7 +37,7 @@ node_modules/
 jspm_packages/
 src/firebase/credenciales.js
 dist/*
-\src\firebase\credenciales.js
+
 
 # TypeScript v1 declaration files
 typings/
@@ -59,6 +59,7 @@ typings/
 
 # Ignora Firebase
 .firebase/*
+.firebase\*
 
 
 .github\*
@@ -83,3 +84,4 @@ typings/
 
 # FuseBox cache
 .fusebox/
+src/firebase/credenciales.js
