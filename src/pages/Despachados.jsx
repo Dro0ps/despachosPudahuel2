@@ -127,6 +127,15 @@ const Despachados = () => {
 
         },
         {
+            name: <Encabezado>Tipo</Encabezado>,
+            selector: row => <p className=' font-bold text-black-900 uppercase'>{row.tipo_doc}</p>,
+            sortable: false,
+            grow: 0,
+            wrap: true,
+            
+
+        },
+        /* {
             name: <Encabezado>Creado</Encabezado>,
             selector: row => <p className=' font-bold text-black-900'>{row.creador.usuario.nombre}  
             <span className=' font-light'> {' el '} {moment(row.creado).format('Do MMMM  YYYY, h:mm:ss a')}</span></p>,
@@ -134,14 +143,14 @@ const Despachados = () => {
             omit: false,
             wrap: true,
 
-        },
+        }, */
         {
             name: <Encabezado>Estado</Encabezado>,
             selector: row => {row.recibido, row.despachado, row.confirmado},
             ////////////////////////////////////////////////////////
-            cell: row => <div>{row.confirmado ? <p>Confirmado</p> : 
-            <div>{ row.despachado ? <p>Despachado</p> : 
-            <div>{ row.recibido ? <p>Recibido</p> : 
+            cell: row => <div>{row.confirmado ? <button className=' font-bold text-green-600' >Confirmado</button> : 
+            <div>{ row.despachado ? <p className='text-orange-600 font-bold' >Despachado</p> : 
+            <div>{ row.recibido ? <p className='text-blue-300 font-bold'>Recibido</p> : 
             <p>Pendiente</p>}</div>}</div>}</div>,
             ///////////////////////////////////////////////////////
             sortable: true,
@@ -222,7 +231,12 @@ const Despachados = () => {
                         <input
                                 type="text"
                                 placeholder="Buscar"
-                                className=" mb-3 mt-3  pl-7 pr-12  "
+                                className="hidden sm:flex items-center w-72 text-left space-x-3 px-4 h-12 
+                                bg-white ring-1 ring-slate-900/10 hover:ring-slate-300 
+                                focus:outline-none focus:ring-2 focus:ring-sky-500 
+                                shadow-sm rounded-lg text-slate-400 dark:bg-slate-800 
+                                dark:ring-0 dark:text-slate-300 dark:highlight-white/5 
+                                dark:hover:bg-slate-700 mb-5" 
                                 name="busqueda"
                                 value={this.state.busqueda}
                                 onChange={this.onChange}

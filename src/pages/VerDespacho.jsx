@@ -164,10 +164,17 @@ const VerDespacho = ({usuario}) => {
                 <p className="mt-4 text-2xl text-gray-500">Detalles de la Orden: {documento}</p>
                 }
 
+                {creado && 
+                <p className="text-2xl mt-4   text-gray-600">
+                    <span className="text-gray-500  font-bold">Creado por: </span><span>{creador.usuario.nombre}</span>
+                    <span> el {`${moment(creado).format('Do MMMM  YYYY, h:mm:ss a')}`}</span>
+                </p>
+                }
+
 
                 {direccion && 
                 <p className="text-2xl mt-4 text-gray-600">
-                    <span className="text-gray-500 uppercase font-bold">Dirección Despacho: </span>
+                    <span className="text-gray-500  font-bold">Despachar en: </span>
                     {direccion}
                 </p>
                 }
@@ -176,16 +183,11 @@ const VerDespacho = ({usuario}) => {
                 
                 {notas &&
                 <p className="text-2xl mt-4 text-gray-600">
-                    <span className="text-gray-500 uppercase font-bold">Descripción: </span>
-                    {notas}
+                    <span className="text-gray-500  font-bold">Nota: </span>
+                    <span className="text-orange-600 font-semibold">{notas}</span>
                 </p> }
 
-                {creado && 
-                <p className="text-2xl mt-4 text-gray-600">
-                    <span className="text-gray-500 uppercase font-bold">Creado por: </span><span>{creador.usuario.nombre}</span>
-                    <span>el {`${moment(creado).format('Do MMMM  YYYY, h:mm:ss a')}`}</span>
-                </p>
-                }
+                
 
                 {fecha_despachado &&
                 <p className="text-2xl mt-4 text-gray-600">

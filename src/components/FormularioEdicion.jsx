@@ -158,6 +158,28 @@ const FormularioEdicion = ({despacho, cargando}) => {
                         <label
                             className='text-gray-800'
                             htmlFor='documento'
+                        >Tipo de Documento:</label>
+                        <Field
+                        as="select"
+                        id='tipo_doc'
+                        name='tipo_doc'
+                        className='mt-2 block w-full p-3 bg-gray-100'
+                        >
+                        <option value="">----Seleccione----</option>
+                        <option value="factura">Factura</option>
+                        <option value="guía">Guía</option>
+                        <option value="-otro">Otro</option>
+                        </Field>
+                        {errors.documento && touched.documento ?
+                            (<Alerta>{errors.documento}</Alerta> )
+                            : null
+                        }
+                    </div>
+
+                    <div className='mb-4'>
+                        <label
+                            className='text-gray-800'
+                            htmlFor='documento'
                         >Numero de Documento:</label>
                         <Field
                             type="number"
