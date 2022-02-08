@@ -175,7 +175,7 @@ const VerDespacho = ({usuario}) => {
                 {direccion && 
                 <p className="text-2xl mt-4 text-gray-600">
                     <span className="text-gray-500  font-bold">Despachar en: </span>
-                    {direccion}
+                    <span className="text-blue-300 font-semibold">{direccion}</span>
                 </p>
                 }
                 
@@ -209,7 +209,7 @@ const VerDespacho = ({usuario}) => {
                         className="inline-block text-center mr-4 bg-green-300 border border-green rounded-md
                          py-3 px-8 font-medium text-black"
                          value={recibido}
-                    >Recibido</button>
+                    >Preparando</button>
 
                     :
 
@@ -219,7 +219,7 @@ const VerDespacho = ({usuario}) => {
                         name="recibido"
                         value={recibido}
                         onClick={estadoRecibido}
-                    >Recibido</button>
+                    >Preparando</button>
                     }
                 
                 {/******************Despachado*******************/}

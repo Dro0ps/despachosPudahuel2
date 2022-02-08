@@ -156,7 +156,7 @@ const Pendientes = () => {
             ////////////////////////////////////////////////////////
             cell: row => <div>{row.confirmado ? <button className=' font-bold text-green-600' >Confirmado</button> : 
             <div>{ row.despachado ? <p className='text-orange-600 font-bold' >Despachado</p> : 
-            <div>{ row.recibido ? <p className='text-blue-300 font-bold'>Recibido</p> : 
+            <div>{ row.recibido ? <p className='text-blue-300 font-bold'>Preparando</p> : 
             <p>Pendiente</p>}</div>}</div>}</div>,
             ///////////////////////////////////////////////////////
             sortable: true,
@@ -174,8 +174,7 @@ const Pendientes = () => {
 
         }, */
         
-        
-        
+   
     ];
 
     /*****************************************************/
