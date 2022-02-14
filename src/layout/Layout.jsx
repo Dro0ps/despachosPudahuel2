@@ -3,7 +3,9 @@ import { Outlet, Link, useLocation } from "react-router-dom"
 import db from '../firebase/credenciales'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import logoHomar from '../img/logoHomar.png'
-import {  faClipboardCheck, faClipboardList, faHourglassHalf, faPlus, faSignOutAlt, faTruck } from "@fortawesome/free-solid-svg-icons";
+import {  faClipboardCheck, faClipboardList, faHourglassHalf, faTruckMoving, faBoxes,  faPlus, faSignOutAlt, faTruck, faHandHolding } from "@fortawesome/free-solid-svg-icons";
+import Swal from "sweetalert2";
+
 
 
 const auth = getAuth(db);
@@ -16,7 +18,19 @@ const Layout = ({usuario}) => {
 
 
     const cerrarSesion = () => {
-        signOut(auth)
+        Swal.fire({
+            title: '¿Desea Cerrar Sesión?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, Cerrar Sesión!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                signOut(auth)
+            }
+          })
+        
     }
 
 
@@ -50,6 +64,11 @@ const Layout = ({usuario}) => {
                     <Link to="/despachos/despachados" className={`${urlActual === '/despachos/despachados' ? 'text-orange-300' : 'text-white'}
                         text-2xl block mt-2 font-extrabold hover:text-orange-300 transition-colors`}>
                         <FontAwesomeIcon className="mr-2" icon={faTruck}/>Despachados
+                    </Link>
+
+                    <Link to="/despachos/entregados" className={`${urlActual === '/despachos/entregados' ? 'text-orange-300' : 'text-white'}
+                        text-2xl block mt-2 font-extrabold hover:text-orange-300 transition-colors`}>
+                        <FontAwesomeIcon className="mr-2" icon={faBoxes}/>Entregados
                     </Link>
 
                     <Link to="/despachos/confirmados" className={`${urlActual === '/despachos/confirmados' ? 'text-orange-300' : 'text-white'}

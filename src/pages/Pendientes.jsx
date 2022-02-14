@@ -6,6 +6,8 @@ import { Component } from 'react/cjs/react.production.min';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import moment from 'moment';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEnvelope, faEnvelopeOpenText, faHourglass, faScroll } from "@fortawesome/free-solid-svg-icons";
 
 
 const firestore = getFirestore(db)
@@ -46,6 +48,7 @@ const Pendientes = () => {
     const [pending, setPending] = useState(true)
 
 
+    const handleSort = (column, sortDirection) => console.log(column.selector, sortDirection);
     
     
 
@@ -119,7 +122,8 @@ const Pendientes = () => {
             selector: row => row.direccion,
             sortable: false,
             grow: 1,
-            wrap: true
+            wrap: true,
+            
 
         },
         
@@ -129,6 +133,7 @@ const Pendientes = () => {
             sortable: false,
             grow: 2,
             wrap: true,
+            hide: 'md',
             
 
         },
@@ -138,6 +143,7 @@ const Pendientes = () => {
             sortable: false,
             grow: 0,
             wrap: true,
+            hide: 'md',
             
 
         },
@@ -152,15 +158,17 @@ const Pendientes = () => {
         }, */
         {
             name: <Encabezado>Estado</Encabezado>,
-            selector: row => {row.recibido, row.despachado, row.confirmado},
+            selector: row => {row.recibido},
             ////////////////////////////////////////////////////////
-            cell: row => <div>{row.confirmado ? <button className=' font-bold text-green-600' >Confirmado</button> : 
-            <div>{ row.despachado ? <p className='text-orange-600 font-bold' >Despachado</p> : 
-            <div>{ row.recibido ? <p className='text-blue-300 font-bold'>Preparando</p> : 
-            <p>Pendiente</p>}</div>}</div>}</div>,
+            cell: row =>  row.recibido ? <button className='text-orange-500  text-2xl font-bold'>
+                <FontAwesomeIcon className="ml-2" icon={faEnvelopeOpenText} /> 
+                </button>: 
+                <button className='text-balck  text-2xl font-bold'>
+                <FontAwesomeIcon className="ml-2" icon={faEnvelope} /> 
+                </button>,
             ///////////////////////////////////////////////////////
             sortable: true,
-            grow: 0.5,
+            grow: 0,
             wrap: true,
 
         },
@@ -235,7 +243,7 @@ const Pendientes = () => {
                         <input
                                 type="text"
                                 placeholder="Buscar"
-                                className="hidden sm:flex items-center w-72 text-left space-x-3 px-4 h-12 
+                                className="sm:flex items-center w-72 text-left space-x-3 px-4 h-12 
                                 bg-white ring-1 ring-slate-900/10 hover:ring-slate-300 
                                 focus:outline-none focus:ring-2 focus:ring-sky-500 
                                 shadow-sm rounded-lg text-slate-400 dark:bg-slate-800 
@@ -258,6 +266,7 @@ const Pendientes = () => {
                             fixedHeaderScrollHeight="1000px"
                             progressPending={pending}
                             noDataComponent={<p>No se encontro ningún elemento</p>}
+                            onSort={handleSort}
                             
                             
                             

@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import moment from 'moment';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTruckMoving } from "@fortawesome/free-solid-svg-icons";
+import { faBoxes, faHourglass, faTruckMoving } from "@fortawesome/free-solid-svg-icons";
 
 
 const firestore = getFirestore(db)
@@ -37,7 +37,7 @@ moment.locale('es', {
   }
   );
 
-const Despachados = () => {
+const Entregados = () => {
 
     moment.locale('es');
 
@@ -52,7 +52,7 @@ const Despachados = () => {
             try {
                 //Como llamar documentos y listarlos en Firebase IMPORTANTE
                 const q = query(collection(firestore,"despachos"),
-                 where("despachado","==",true), where("entregado","==",false));
+                 where("entregado","==",true), where("confirmado","==",false));
                 const querySnapshot = await getDocs(q);
                 
                 const resultado = [];
@@ -87,8 +87,8 @@ const Despachados = () => {
         obtenerDespachosApi();
     }, [])
 
+    const handleSort = (column, sortDirection) => console.log(column.selector, sortDirection);
 
-    
 
 
     const columnas = [
@@ -103,7 +103,7 @@ const Despachados = () => {
 
         },
         {
-            name: <Encabezado>Nombre del Cliente</Encabezado>,
+            name: <Encabezado>Cliente</Encabezado>,
             selector: row => <p className=' font-bold text-black-900 uppercase'>{row.nombre}</p>,
             sortable: true,
             grow: 0.6,
@@ -125,6 +125,7 @@ const Despachados = () => {
             sortable: false,
             grow: 2,
             wrap: true,
+            hide: 'md',
             
 
         },
@@ -134,6 +135,7 @@ const Despachados = () => {
             sortable: false,
             grow: 0,
             wrap: true,
+            hide: 'md',
             
 
         },
@@ -148,9 +150,9 @@ const Despachados = () => {
         }, */
         {
             name: <Encabezado>Estado</Encabezado>,
-            selector: row => row.despachado,
+            selector: row => {row.entregado},
             ////////////////////////////////////////////////////////
-            cell:row => <button className='text-red-800 text-2xl ml-2 font-bold' ><FontAwesomeIcon className="" icon={faTruckMoving} /></button>,
+            cell: row => <button className='text-purple-800  text-2xl font-bold' ><FontAwesomeIcon className="ml-2" icon={faBoxes} /></button>,
             ///////////////////////////////////////////////////////
             sortable: true,
             grow: 0.5,
@@ -228,18 +230,18 @@ const Despachados = () => {
                         
                         <Encabezado>Filtrar resultados</Encabezado>
                         <input
-                            type="text"
-                            placeholder="Buscar"
-                            className="sm:flex items-center w-72 text-left space-x-3 px-4 h-12 
-                            bg-white ring-1 ring-slate-900/10 hover:ring-slate-300 
-                            focus:outline-none focus:ring-2 focus:ring-sky-500 
-                            shadow-sm rounded-lg text-slate-400 dark:bg-slate-800 
-                            dark:ring-0 dark:text-slate-300 dark:highlight-white/5 
-                            dark:hover:bg-slate-700 mb-5" 
-                            name="busqueda"
-                            value={this.state.busqueda}
-                            onChange={this.onChange}
-                        />
+                                type="text"
+                                placeholder="Buscar"
+                                className="sm:flex items-center w-72 text-left space-x-3 px-4 h-12 
+                                bg-white ring-1 ring-slate-900/10 hover:ring-slate-300 
+                                focus:outline-none focus:ring-2 focus:ring-sky-500 
+                                shadow-sm rounded-lg text-slate-400 dark:bg-slate-800 
+                                dark:ring-0 dark:text-slate-300 dark:highlight-white/5 
+                                dark:hover:bg-slate-700 mb-5" 
+                                name="busqueda"
+                                value={this.state.busqueda}
+                                onChange={this.onChange}
+                            />
                 
                     {/* MUESTRA TABLA */}
                     
@@ -253,6 +255,7 @@ const Despachados = () => {
                             fixedHeaderScrollHeight="1000px"
                             progressPending={pending}
                             noDataComponent={<p>No se encontro ningún elemento</p>}
+                            onSort={handleSort}
                             
                             
                             
@@ -278,4 +281,4 @@ const Despachados = () => {
     )
 }
 
-export default Despachados
+export default Entregados

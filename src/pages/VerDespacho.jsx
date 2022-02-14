@@ -44,6 +44,7 @@ const VerDespacho = ({usuario}) => {
         notas,
         recibido,
         despachado,
+        entregado,
         confirmado,
         archivo,
         fecha_despachado,
@@ -115,6 +116,23 @@ const VerDespacho = ({usuario}) => {
         
     }
 
+    const estadoEntregado = async() => {
+        if(usuario.rol === 'bodega'){
+            despacho.entregado = true;
+            setDespacho({
+                ...despacho,
+                entregado: true,
+            })
+            actualizaEstado(despacho);
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Usted no tiene permitido cambiar este estado',
+            })
+        }
+        
+    }
+
     const estadoConfirmado = async() => {
         if(usuario.rol === 'vendedor'){
             despacho.confirmado = true;
@@ -143,8 +161,11 @@ const VerDespacho = ({usuario}) => {
     const alertaDespacho = () => {
         Swal.fire({title:'Antes debes indicar Recibido', icon: 'error'})
     }
+    const alertaEntregado = () => {
+        Swal.fire({title:'Antes debes indicar Despachado', icon: 'error'})
+    }
     const alertaConfirmado = () => {
-        Swal.fire({title: 'Antes debes indicar el Despacho', icon: 'error'})
+        Swal.fire({title: 'Antes debes indicar el Entregado', icon: 'error'})
     }
 
     return (
@@ -259,6 +280,43 @@ const VerDespacho = ({usuario}) => {
                     
                     }
 
+                {/******************Despachado*******************/}
+                {entregado ?
+                    <button 
+                        className="inline-block text-center mr-4 bg-green-300 border border-green rounded-md
+                        py-3 px-8 font-medium text-black"
+                        value={entregado}
+                    >Entregado</button>
+
+                    :
+
+                    <>
+                        { despachado ?
+                            <button 
+                                className="inline-block text-center mr-4 bg-white-700 border border-green rounded-md
+                                py-3 px-8 font-medium text-black hover:bg-green-300"
+                                name="entregado"
+                                onClick={estadoEntregado}
+                                value={entregado}
+                            >Entregado</button>
+
+                            :
+
+                            <button 
+                                className="inline-block text-center mr-4 bg-white-700 border border-green rounded-md
+                                py-3 px-8 font-medium text-black "
+                                name="entregado"
+                                onClick={alertaEntregado}
+                                value={entregado}
+                            >Entregado</button>
+
+                        }
+                        
+                    </>
+
+                    
+                }
+
                 {/******************Confirmado*******************/}
                 {confirmado ?
                     <button 
@@ -295,7 +353,7 @@ const VerDespacho = ({usuario}) => {
                     </>
 
                     
-                    }
+                }
 
                 </div>
 

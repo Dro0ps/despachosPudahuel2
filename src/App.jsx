@@ -12,11 +12,12 @@ import NuevoDespacho from './pages/NuevoDespacho';
 import db from './firebase/credenciales';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
-import Spinner from './components/Spinner';
+
 import Pendientes from './pages/Pendientes';
 import Despachados from './pages/Despachados';
 import Confirmados from './pages/Confirmados';
-import Loading from './components/Loading';
+import Entregados from './pages/Entregados';
+
 
 
 
@@ -113,6 +114,7 @@ function App() {
               <Route path="nuevo" element={<NuevoDespacho usuario={user}/>}/>
               <Route path="listado" element={<Listado usuario={user}/>}/>
               <Route path="despachados" element={<Despachados/>}/>
+              <Route path="entregados" element={<Entregados/>}/>
               <Route path="confirmados" element={<Confirmados/>}/>
               <Route path="editar/:id" element={<EditarDespacho/>}/>
               <Route path=":id" element={<VerDespacho usuario={user} />}/>

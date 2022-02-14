@@ -68,9 +68,11 @@ const FormularioEdicion = ({despacho, cargando}) => {
 
                 await updateDoc(doc(db, `despachos/${enlaceID}`), valores);
 
+            } else {
+                await updateDoc(doc(db, `despachos/${enlaceID}`), valores);
             }
 
-            await updateDoc(doc(db, `despachos/${enlaceID}`), valores);
+            
             
             
         } catch (error) {
@@ -97,6 +99,7 @@ const FormularioEdicion = ({despacho, cargando}) => {
                     creado: +new Date(),
                     recibido: despacho?.recibido ?? false,
                     despachado: despacho?.despachado ?? false,
+                    entregado: despacho?.entregado ?? false,
                     confirmado: despacho?.confirmado ?? false,
                     fecha_despachado: despacho?.fecha_despachado ?? '',
                     fecha_confirmado: despacho?.fecha_confirmado ?? '',
@@ -104,7 +107,7 @@ const FormularioEdicion = ({despacho, cargando}) => {
                     direccion: despacho?.direccion ?? '',
                     documento: despacho?.documento ?? '',
                     notas: despacho?.notas ?? '',
-                    archivo: urlDescarga ?? '',
+                    archivo: despacho?.archivo ?? '' ,
                 }}
                 enableReinitialize={true} // props muy util para formulario en conjunto con defaultProps
                 onSubmit={ async (values, {resetForm}) => {
@@ -182,7 +185,7 @@ const FormularioEdicion = ({despacho, cargando}) => {
                             htmlFor='documento'
                         >Numero de Documento:</label>
                         <Field
-                            type="number"
+                            type="text"
                             id='documento'
                             name='documento'
                             className='mt-2 block w-full p-3 bg-gray-100'

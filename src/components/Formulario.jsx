@@ -102,6 +102,7 @@ const Formulario = ({despacho, cargando, usuario}) => {
                     creador: usuario,
                     recibido: despacho?.recibido ?? false,
                     despachado: despacho?.despachado ?? false,
+                    entregado: despacho?.entregado ?? false,
                     confirmado: despacho?.confirmado ?? false,
                     fecha_despachado: despacho?.fecha_despachado ?? '',
                     fecha_confirmado: despacho?.fecha_confirmado ?? '',
@@ -189,7 +190,7 @@ const Formulario = ({despacho, cargando, usuario}) => {
                             htmlFor='documento'
                         >Numero de Documento:</label>
                         <Field
-                            type="number"
+                            type="text"
                             id='documento'
                             name='documento'
                             className='mt-2 block w-full p-3 bg-gray-100'

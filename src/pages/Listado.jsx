@@ -103,6 +103,8 @@ const Listado = ({usuario}) => {
         
     }
 
+    const handleSort = (column, sortDirection) => console.log(column.selector, sortDirection);
+
     
 
     const columnas = [
@@ -129,16 +131,18 @@ const Listado = ({usuario}) => {
             selector: row => row.direccion,
             sortable: false,
             grow: 1,
-            wrap: true
+            wrap: true,
+            hide: 'md',
 
         },
         
         {
-            name: <Encabezado>Detalles</Encabezado>,
-            selector: row => row.notas,
+            name: <Encabezado>Notas</Encabezado>,
+            selector: row => <p className='pt-2 pb-2'>{row.notas}</p>,
             sortable: false,
             grow: 2,
             wrap: true,
+            hide: 'md',
             
 
         },
@@ -148,6 +152,7 @@ const Listado = ({usuario}) => {
             sortable: false,
             grow: 0,
             wrap: true,
+            hide: 'md',
             
 
         },
@@ -162,12 +167,13 @@ const Listado = ({usuario}) => {
         }, */
         {
             name: <Encabezado>Estado</Encabezado>,
-            selector: row => {row.recibido, row.despachado, row.confirmado},
+            selector: row => {row.recibido, row.despachado, row.confirmado, row.entregado},
             ////////////////////////////////////////////////////////
-            cell: row => <div>{row.confirmado ? <button className=' font-bold text-green-600' >Confirmado</button> : 
-            <div>{ row.despachado ? <p className='text-orange-600 font-bold' >Despachado</p> : 
-            <div>{ row.recibido ? <p className='text-blue-300 font-bold'>Preparando</p> : 
-            <p>Pendiente</p>}</div>}</div>}</div>,
+            cell: row => <>{row.confirmado ? <button className=' font-bold text-green-600' >Confirmado</button> : 
+            <>{row.entregado ? <p className='text-purple-800 font-bold'>Entregado</p>:
+             <>{ row.despachado ? <p className='text-red-800 font-bold' >Despachado</p> : 
+            <>{ row.recibido ? <p className='text-orange-500  font-bold'>Preparando</p> : 
+            <p className='text-black font-bold'>Pendiente</p>}</>}</>}</>}</>,
             ///////////////////////////////////////////////////////
             sortable: true,
             grow: 1,
@@ -316,7 +322,7 @@ const Listado = ({usuario}) => {
                         <input
                                 type="text"
                                 placeholder="Buscar"
-                                className="hidden sm:flex items-center w-72 text-left space-x-3 px-4 h-12 
+                                className=" sm:flex items-center w-72 text-left space-x-3 px-4 h-12 
                                 bg-white ring-1 ring-slate-900/10 hover:ring-slate-300 
                                 focus:outline-none focus:ring-2 focus:ring-sky-500 
                                 shadow-sm rounded-lg text-slate-400 dark:bg-slate-800 
@@ -339,6 +345,7 @@ const Listado = ({usuario}) => {
                             fixedHeaderScrollHeight="1000px"
                             progressPending={pending}
                             noDataComponent={<p>No se encontro ningún elemento</p>}
+                            onSort={handleSort} 
   
                         />
                    

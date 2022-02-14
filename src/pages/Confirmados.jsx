@@ -6,6 +6,8 @@ import { Component } from 'react/cjs/react.production.min';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import moment from 'moment';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClipboardCheck } from '@fortawesome/free-solid-svg-icons';
 
 
 const firestore = getFirestore(db)
@@ -92,7 +94,7 @@ const Confirmados = () => {
             name: <Encabezado>N° Doc</Encabezado>,
             selector: row => row.documento,
             cell: row => <Boton  onClick={() => navigate(`/despachos/${row.id}`)}>{row.documento}</Boton>,
-            sortable: true,
+            sortable: false,
             grow: 0,
             wrap: true
 
@@ -100,7 +102,7 @@ const Confirmados = () => {
         {
             name: <Encabezado>Nombre del Cliente</Encabezado>,
             selector: row => <p className=' font-bold text-black-900 uppercase'>{row.nombre}</p>,
-            sortable: true,
+            sortable: false,
             grow: 0.6,
             wrap: true
 
@@ -121,6 +123,7 @@ const Confirmados = () => {
             sortable: false,
             grow: 2,
             wrap: true,
+            hide: 'md',
             
 
         },
@@ -130,6 +133,18 @@ const Confirmados = () => {
             sortable: false,
             grow: 0,
             wrap: true,
+            hide: 'md',
+            
+
+        },
+        {
+            name: <Encabezado>Confirmado el:</Encabezado>,
+            selector: row => row.fecha_confirmado,
+            sortable: true,
+            grow: 0,
+            wrap: true,
+            omit: true,
+            hide: 'md',
             
 
         },
@@ -144,14 +159,11 @@ const Confirmados = () => {
         }, */
         {
             name: <Encabezado>Estado</Encabezado>,
-            selector: row => {row.recibido, row.despachado, row.confirmado},
+            selector: row => {row.confirmado},
             ////////////////////////////////////////////////////////
-            cell: row => <div>{row.confirmado ? <button className=' font-bold text-green-600' >Confirmado</button> : 
-            <div>{ row.despachado ? <p className='text-orange-600 font-bold' >Despachado</p> : 
-            <div>{ row.recibido ? <p className='text-blue-300 font-bold'>Preparando</p> : 
-            <p>Pendiente</p>}</div>}</div>}</div>,
+            cell: row => <button className='text-green-600 text-2xl ml-2 font-bold' ><FontAwesomeIcon className="" icon={faClipboardCheck} /></button>,
             ///////////////////////////////////////////////////////
-            sortable: true,
+            sortable: false,
             grow: 0.5,
             wrap: true,
 
@@ -227,18 +239,18 @@ const Confirmados = () => {
                         
                         <Encabezado>Filtrar resultados</Encabezado>
                         <input
-                                type="text"
-                                placeholder="Buscar"
-                                className="hidden sm:flex items-center w-72 text-left space-x-3 px-4 h-12 
-                                bg-white ring-1 ring-slate-900/10 hover:ring-slate-300 
-                                focus:outline-none focus:ring-2 focus:ring-sky-500 
-                                shadow-sm rounded-lg text-slate-400 dark:bg-slate-800 
-                                dark:ring-0 dark:text-slate-300 dark:highlight-white/5 mb-5
-                                dark:hover:bg-slate-700" 
-                                name="busqueda"
-                                value={this.state.busqueda}
-                                onChange={this.onChange}
-                            />
+                            type="text"
+                            placeholder="Buscar"
+                            className="sm:flex items-center w-72 text-left space-x-3 px-4 h-12 
+                            bg-white ring-1 ring-slate-900/10 hover:ring-slate-300 
+                            focus:outline-none focus:ring-2 focus:ring-sky-500 
+                            shadow-sm rounded-lg text-slate-400 dark:bg-slate-800 
+                            dark:ring-0 dark:text-slate-300 dark:highlight-white/5 mb-5
+                            dark:hover:bg-slate-700" 
+                            name="busqueda"
+                            value={this.state.busqueda}
+                            onChange={this.onChange}
+                        />
                 
                     {/* MUESTRA TABLA */}
                     
