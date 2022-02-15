@@ -113,6 +113,7 @@ const Confirmados = () => {
             sortable: false,
             grow: 1,
             wrap: true,
+            hide: 'md',
             
 
         },

@@ -4,17 +4,14 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signInWithRedirect,
+
 } from "firebase/auth";
 
 import "../styles/Spinner.css";
 
 import db from "../firebase/credenciales";
 import { doc, getFirestore, setDoc } from "firebase/firestore";
-import Loading from "../components/Loading";
-import { Outlet } from "react-router-dom";
-import Swal from "sweetalert2";
-import Spinner from "../components/Spinner";
+
 
 const auth = getAuth(db);
 

@@ -238,21 +238,25 @@ const Pendientes = () => {
             return (
                 <>
                     {/* Campo BUSCADOR */}
+                    
+                        <Encabezado className='ml-4 sm:ml-0'>Filtrar resultados</Encabezado>
                         
-                        <Encabezado>Filtrar resultados</Encabezado>
                         <input
-                                type="text"
-                                placeholder="Buscar"
-                                className="sm:flex items-center w-72 text-left space-x-3 px-4 h-12 
-                                bg-white ring-1 ring-slate-900/10 hover:ring-slate-300 
-                                focus:outline-none focus:ring-2 focus:ring-sky-500 
-                                shadow-sm rounded-lg text-slate-400 dark:bg-slate-800 
-                                dark:ring-0 dark:text-slate-300 dark:highlight-white/5 
-                                dark:hover:bg-slate-700 mb-5 "
-                                name="busqueda"
-                                value={this.state.busqueda}
-                                onChange={this.onChange}
-                            />
+                            type="text"
+                            placeholder="Buscar"
+                            className="sm:flex ml-4 sm:ml-0 items-center w-72 text-left space-x-3 px-4 h-12 
+                            bg-white ring-1 ring-slate-900/10 hover:ring-slate-300 
+                            focus:outline-none focus:ring-2 focus:ring-sky-500 
+                            shadow-sm rounded-lg text-slate-400 dark:bg-slate-800 
+                            dark:ring-0 dark:text-slate-300 dark:highlight-white/5 
+                            dark:hover:bg-slate-700 mb-5 "
+                            name="busqueda"
+                            value={this.state.busqueda}
+                            onChange={this.onChange}
+                        />
+
+                        
+                        
                 
                     {/* MUESTRA TABLA */}
                     
@@ -285,8 +289,8 @@ const Pendientes = () => {
 
     return (
         <>
-            <h1 className='font-extrabold text-4xl flex justify-center text-orange-900'>Listado de Pendientes</h1>
-
+            <h1 className='font-extrabold max-h-full  text-4xl flex justify-center text-orange-900'>Listado de Pendientes</h1>
+            
             <Tabla />
         </>
     )

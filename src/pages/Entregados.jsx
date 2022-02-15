@@ -115,7 +115,8 @@ const Entregados = () => {
             selector: row => row.direccion,
             sortable: false,
             grow: 1,
-            wrap: true
+            wrap: true,
+            hide: 'md',
 
         },
         

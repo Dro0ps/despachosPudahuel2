@@ -88,7 +88,7 @@ const Despachados = () => {
     }, [])
 
 
-    
+    const handleSort = (column, sortDirection) => console.log(column.selector, sortDirection);
 
 
     const columnas = [
@@ -115,7 +115,8 @@ const Despachados = () => {
             selector: row => row.direccion,
             sortable: false,
             grow: 1,
-            wrap: true
+            wrap: true,
+            hide: 'md',
 
         },
         
@@ -125,7 +126,7 @@ const Despachados = () => {
             sortable: false,
             grow: 2,
             wrap: true,
-            
+            hide: 'md',
 
         },
         {
@@ -134,7 +135,7 @@ const Despachados = () => {
             sortable: false,
             grow: 0,
             wrap: true,
-            
+            hide: 'md',
 
         },
         /* {
@@ -253,6 +254,7 @@ const Despachados = () => {
                             fixedHeaderScrollHeight="1000px"
                             progressPending={pending}
                             noDataComponent={<p>No se encontro ningún elemento</p>}
+                            onSort={handleSort}
                             
                             
                             
