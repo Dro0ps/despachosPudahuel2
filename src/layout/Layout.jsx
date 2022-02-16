@@ -101,7 +101,7 @@ const Layout = ({usuario}) => {
 
             <div className=" sm:p-4  md:h-screen  w-full overflow-scroll">
 
-                <div className="flex align-middle  md:hidden justify-between content-between items-center mb-8">
+                <div className="flex align-middle  md:hidden justify-between content-between items-center p-8 mb-8">
                     {/* Logo Homar */}
                     <h2 className="text-4xl font-extrabold text-center text-white"><img className=" max-w-auto" src={logoHomar} alt="Logo" /></h2>
 

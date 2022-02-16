@@ -100,10 +100,9 @@ const Confirmados = () => {
 
         },
         {
-            name: <Encabezado>Nombre del Cliente</Encabezado>,
+            name: <Encabezado>Cliente</Encabezado>,
             selector: row => <p className=' font-bold text-black-900 uppercase'>{row.nombre}</p>,
             sortable: false,
-            grow: 0.6,
             wrap: true
 
         },
@@ -119,7 +118,7 @@ const Confirmados = () => {
         },
         
         {
-            name: <Encabezado>Detalles</Encabezado>,
+            name: <Encabezado>Notas</Encabezado>,
             selector: row => row.notas,
             sortable: false,
             grow: 2,
@@ -286,7 +285,7 @@ const Confirmados = () => {
 
     return (
         <>
-            <h1 className='font-extrabold max-h-full  text-4xl flex justify-center text-orange-700 mb-10 mt-4'>Listado de Confirmados</h1>
+            <h1 className='font-extrabold max-h-full  text-4xl flex justify-center text-orange-700 mb-12 mt-4'>Listado de Confirmados</h1>
 
             <Tabla />
         </>
