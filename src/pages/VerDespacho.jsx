@@ -170,9 +170,9 @@ const VerDespacho = ({usuario}) => {
 
     return (
         /* Object.keys(despacho).length === 0 ? <p>No hay resultados</p> : ( */
-        <div className="relative bg-white overflow-hidden">
+        <div className=" bg-white overflow-hidden">
         <div className="pt-4 pb-80 sm:pt-4 sm:pb-20 lg:pt-8 lg:pb-8">
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 sm:static flex flex-col justify-between">
+        <div className=" max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 sm:static flex flex-col justify-between">
         <div className="sm:max-w-xl">
         {!cargando ? <>
 

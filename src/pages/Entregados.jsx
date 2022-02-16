@@ -138,6 +138,7 @@ const Entregados = () => {
             wrap: true,
             hide: 'md',
             
+            
 
         },
         /* {
@@ -158,6 +159,7 @@ const Entregados = () => {
             sortable: true,
             grow: 0.5,
             wrap: true,
+            right: true,
 
         },
 
@@ -275,7 +277,7 @@ const Entregados = () => {
 
     return (
         <>
-            <h1 className='font-extrabold text-4xl flex justify-center text-orange-900'>Listado de Despachos</h1>
+            <h1 className='font-extrabold max-h-full  text-4xl flex justify-center text-orange-700 mb-10 mt-4'>Listado de Entregados</h1>
 
             <Tabla />
         </>

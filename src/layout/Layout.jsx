@@ -44,25 +44,6 @@ const Layout = ({usuario}) => {
                 <div>
                 <h2 className="text-4xl font-extrabold text-center text-white"><img className=" max-w-auto" src={logoHomar} alt="Logo" /></h2>
 
-
-                
-
-                <div className="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden  pt-6 lg:pt-0" id="nav-content">
-                    <ul className="list-reset lg:flex justify-end flex-1 items-center">
-                        <li className="mr-3">
-                            <a className="inline-block py-2 px-4 text-white no-underline" href="#">Active</a>
-                        </li>
-                        <li className="mr-3">
-                            <a className="inline-block text-gray-600 no-underline hover:text-gray-200 hover:text-underline py-2 px-4" href="#">link</a>
-                        </li>
-                        <li className="mr-3">
-                            <a className="inline-block text-gray-600 no-underline hover:text-gray-200 hover:text-underline py-2 px-4" href="#">link</a>
-                        </li>
-                        <li className="mr-3">
-                            <a className="inline-block  text-gray-600 no-underline hover:text-gray-200 hover:text-underline py-2 px-4" href="#">link</a>
-                        </li>
-                    </ul>
-                </div>
                 
                 <nav className="mt-10">
 
@@ -105,7 +86,6 @@ const Layout = ({usuario}) => {
                     <h2 className="text-white mt-20 mb-10">Usuario: <p className="font-extrabold uppercase text-1xl">{usuario.nombre}</p></h2>
                     }
                     
-
                 </nav>
 
 
@@ -127,18 +107,21 @@ const Layout = ({usuario}) => {
 
 
                     {/* Menu Hamburguer */}
-                    <div className="block lg:hidden text-1xl">
-                        <button id="nav-toggle" className="md:hidden  flex items-center px-3 py-2 border rounded text-orange-500 border-orange-500 transition-colors hover:text-orange-700 hover:border-orange-700">
-                            <svg className="fill-current h-10 w-10" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
-                        </button>
-                    </div>
+                    
+                    
+                    <MenuMovil/>
+                    
+                    
 
                 </div>
 
-                {/* Menu Hamburguer 2 */}
-                <MenuMovil/>
                 
-                <Outlet/>
+                    <Outlet/>
+                
+
+                
+                
+                
             </div>
             
         </div>

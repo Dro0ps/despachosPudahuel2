@@ -136,6 +136,7 @@ const Despachados = () => {
             grow: 0,
             wrap: true,
             hide: 'md',
+            
 
         },
         /* {
@@ -154,8 +155,9 @@ const Despachados = () => {
             cell:row => <button className='text-red-800 text-2xl ml-2 font-bold' ><FontAwesomeIcon className="" icon={faTruckMoving} /></button>,
             ///////////////////////////////////////////////////////
             sortable: true,
-            grow: 0.5,
+            grow: 0,
             wrap: true,
+            right: true,
 
         },
 
@@ -273,7 +275,7 @@ const Despachados = () => {
 
     return (
         <>
-            <h1 className='font-extrabold text-4xl flex justify-center text-orange-900'>Listado de Despachos</h1>
+            <h1 className='font-extrabold max-h-full  text-4xl flex justify-center text-orange-700 mb-10 mt-4'>Listado de Despachos</h1>
 
             <Tabla />
         </>

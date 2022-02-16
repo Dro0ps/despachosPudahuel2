@@ -1,17 +1,41 @@
 import { Menu, Transition } from '@headlessui/react'
-import { Fragment, useEffect, useRef, useState } from 'react'
+import { Fragment } from 'react'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBars } from '@fortawesome/free-solid-svg-icons'
+import { Link } from "react-router-dom"
+import { faBars, faBoxes, faClipboardCheck, faClipboardList, faDoorOpen, faHourglassHalf, faPlus, faTruck } from '@fortawesome/free-solid-svg-icons'
+import Swal from 'sweetalert2'
+import db from '../firebase/credenciales'
+import { getAuth, signOut } from "firebase/auth";
+
+  
+const auth = getAuth(db);
 
 
 export default function Example() {
+
+
+  const cerrarSesion = () => {
+    Swal.fire({
+        title: '¿Desea Cerrar Sesión?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, Cerrar Sesión!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+            signOut(auth)
+        }
+      })
+  }   
+
   return (
-    <div className="w-56 text-right fixed top-16">
-      <Menu as="div" className="relative inline-block text-left">
+    <div className="w-56 text-right lg:hidden block top-16">
+      <Menu as="div" className=" relative inline-block text-left">
         <div>
-          <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-orange-700 rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-            <FontAwesomeIcon className="ml-2" icon={faBars} />
+          <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-orange-500  hover:bg-orange-700 rounded-md   focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+          <FontAwesomeIcon className="mr-2" icon={faBars} />
             <ChevronDownIcon
               className="w-5 h-5 ml-2 -mr-1 text-orange-200 hover:text-orange-100"
               aria-hidden="true"
@@ -28,121 +52,224 @@ export default function Example() {
           leaveTo="transform opacity-0 scale-95"
         >
           <Menu.Items className="absolute right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-            <div className="px-1 py-1 ">
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    className={`${
-                      active ? 'bg-orange-500 text-white' : 'text-gray-900'
-                    } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
-                  >
-                    {active ? (
-                      <EditActiveIcon
-                        className="w-5 h-5 mr-2"
-                        aria-hidden="true"
-                      />
-                    ) : (
-                      <EditInactiveIcon
-                        className="w-5 h-5 mr-2"
-                        aria-hidden="true"
-                      />
-                    )}
-                    Edit
-                  </button>
-                )}
-              </Menu.Item>
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    className={`${
-                      active ? 'bg-orange-500 text-white' : 'text-gray-900'
-                    } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
-                  >
-                    {active ? (
-                      <DuplicateActiveIcon
-                        className="w-5 h-5 mr-2"
-                        aria-hidden="true"
-                      />
-                    ) : (
-                      <DuplicateInactiveIcon
-                        className="w-5 h-5 mr-2"
-                        aria-hidden="true"
-                      />
-                    )}
-                    Duplicate
-                  </button>
-                )}
-              </Menu.Item>
-            </div>
+            
             <div className="px-1 py-1">
+              
+
+              {/* ******************** Items Desplegables ****************** */}
+
+              {/* ******** Nuevo ******** */}
+
               <Menu.Item>
                 {({ active }) => (
-                  <button
+                  <Link
+                    to='/despachos/nuevo'
                     className={`${
-                      active ? 'bg-orange-500 text-white' : 'text-gray-900'
-                    } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
+                      active ? 'bg-orange-500 text-white font-semibold' : 'text-orange-900'
+                    } group flex rounded-md font-semibold items-center w-full px-2 py-2 text-sm`}
                   >
                     {active ? (
-                      <ArchiveActiveIcon
-                        className="w-5 h-5 mr-2"
+                      
+                      <FontAwesomeIcon
+                        className="w-5 h-5 mr-2 text-white"
                         aria-hidden="true"
+                        icon={faPlus}
                       />
                     ) : (
-                      <ArchiveInactiveIcon
-                        className="w-5 h-5 mr-2"
-                        aria-hidden="true"
-                      />
-                    )}
-                    Archive
-                  </button>
-                )}
-              </Menu.Item>
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    className={`${
-                      active ? 'bg-orange-500 text-white' : 'text-gray-900'
-                    } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
-                  >
-                    {active ? (
-                      <MoveActiveIcon
-                        className="w-5 h-5 mr-2"
-                        aria-hidden="true"
-                      />
-                    ) : (
-                      <MoveInactiveIcon
-                        className="w-5 h-5 mr-2"
-                        aria-hidden="true"
-                      />
-                    )}
-                    Move
-                  </button>
-                )}
-              </Menu.Item>
-            </div>
-            <div className="px-1 py-1">
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    className={`${
-                      active ? 'bg-orange-500 text-white' : 'text-gray-900'
-                    } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
-                  >
-                    {active ? (
-                      <DeleteActiveIcon
+                      <FontAwesomeIcon
                         className="w-5 h-5 mr-2 text-orange-400"
                         aria-hidden="true"
-                      />
-                    ) : (
-                      <DeleteInactiveIcon
-                        className="w-5 h-5 mr-2 text-orange-400"
-                        aria-hidden="true"
+                        icon={faPlus}
                       />
                     )}
-                    Delete
+                    Crear Nuevo
+                    
+                  </Link>
+                )}
+              </Menu.Item>
+
+              {/* ******** Pendientes ******** */}
+
+              <Menu.Item>
+                
+                {({ active }) => (
+                  <Link
+                    to='/despachos'
+                    className={`${
+                      active ? 'bg-orange-500 text-white font-semibold' : 'text-orange-900'
+                    } group flex rounded-md font-semibold items-center w-full px-2 py-2 text-sm`}
+                  >
+                    {active ? (
+                      
+                      <FontAwesomeIcon
+                        className="w-5 h-5 mr-2 text-white"
+                        aria-hidden="true"
+                        icon={faHourglassHalf}
+                      />
+                    ) : (
+                      <FontAwesomeIcon
+                        className="w-5 h-5 mr-2 text-orange-400"
+                        aria-hidden="true"
+                        icon={faHourglassHalf}
+                      />
+                    )}
+                    Pendientes
+                  </Link>
+                )}
+                
+                
+               
+                
+              </Menu.Item>
+
+              {/* ******** Despachados ******** */}
+
+              <Menu.Item>
+                {({ active }) => (
+                  <Link
+                    to='/despachos/despachados'
+                    className={`${
+                      active ? 'bg-orange-500 text-white font-semibold' : 'text-orange-900'
+                    } group flex rounded-md font-semibold items-center w-full px-2 py-2 text-sm`}
+                  >
+                    {active ? (
+                      
+                      <FontAwesomeIcon
+                        className="w-5 h-5 mr-2 text-white"
+                        aria-hidden="true"
+                        icon={faTruck}
+                      />
+                    ) : (
+                      <FontAwesomeIcon
+                        className="w-5 h-5 mr-2 text-orange-400"
+                        aria-hidden="true"
+                        icon={faTruck}
+                      />
+                    )}
+                    Despachados
+                  </Link>
+                )}
+              </Menu.Item>
+
+              {/* ******** Entregados ******** */}
+
+              <Menu.Item>
+                {({ active }) => (
+                  <Link
+                    to='/despachos/entregados'
+                    className={`${
+                      active ? 'bg-orange-500 text-white font-semibold' : 'text-orange-900'
+                    } group flex rounded-md font-semibold items-center w-full px-2 py-2 text-sm`}
+                  >
+                    {active ? (
+                      
+                      <FontAwesomeIcon
+                        className="w-5 h-5 mr-2 text-white"
+                        aria-hidden="true"
+                        icon={faBoxes}
+                      />
+                    ) : (
+                      <FontAwesomeIcon
+                        className="w-5 h-5 mr-2 text-orange-400"
+                        aria-hidden="true"
+                        icon={faBoxes}
+                      />
+                    )}
+                    Entregados
+                  </Link>
+                )}
+              </Menu.Item>
+
+
+              {/* ******* Confirmados ******** */}
+
+              <Menu.Item>
+                {({ active }) => (
+                  <Link
+                    to='/despachos/confirmados'
+                    className={`${
+                      active ? 'bg-orange-500 text-white font-semibold' : 'text-orange-900'
+                    } group flex rounded-md font-semibold items-center w-full px-2 py-2 text-sm`}
+                  >
+                    {active ? (
+                      
+                      <FontAwesomeIcon
+                        className="w-5 h-5 mr-2 text-white"
+                        aria-hidden="true"
+                        icon={faClipboardCheck}
+                      />
+                    ) : (
+                      <FontAwesomeIcon
+                        className="w-5 h-5 mr-2 text-orange-400"
+                        aria-hidden="true"
+                        icon={faClipboardCheck}
+                      />
+                    )}
+                    Confirmados
+                  </Link>
+                )}
+              </Menu.Item>
+
+            {/* ********** Listado  ********* */}
+
+            <Menu.Item>
+                {({ active }) => (
+                  <Link
+                    to='/despachos/listado'
+                    className={`${
+                      active ? 'bg-orange-500 text-white font-semibold' : 'text-orange-900'
+                    } group flex rounded-md items-center font-semibold w-full px-2 py-2 text-sm`}
+                  >
+                    {active ? (
+                      
+                      <FontAwesomeIcon
+                        className="w-5 h-5 mr-2 text-white"
+                        aria-hidden="true"
+                        icon={faClipboardList}
+                      />
+                    ) : (
+                      <FontAwesomeIcon
+                        className="w-5 h-5 mr-2 text-orange-400"
+                        aria-hidden="true"
+                        icon={faClipboardList}
+                      />
+                    )}
+                    Listado
+                  </Link>
+                )}
+              </Menu.Item>
+
+              {/* ******* CERRAR SESIÓN ******* */}
+
+              <div className=''>
+              <Menu.Item>
+                {({ active }) => (
+                  <button
+                    onClick={cerrarSesion}
+                    className={`${
+                      active ? 'bg-orange-500 text-white font-bold' : 'text-orange-900'
+                    } group flex font-bold rounded-md items-center w-full px-2 py-2 text-sm`}
+                  >
+                    {active ? (
+                      
+                      <FontAwesomeIcon
+                        className="w-5 h-5 mr-2 text-black"
+                        aria-hidden="true"
+                        icon={faDoorOpen}
+                      />
+                    ) : (
+                      <FontAwesomeIcon
+                        className="w-5 h-5 mr-2 text-orange-900"
+                        aria-hidden="true"
+                        icon={faDoorOpen}
+                      />
+                    )}
+                    Cerrar Sesión
                   </button>
                 )}
               </Menu.Item>
+              </div>
+              
             </div>
           </Menu.Items>
         </Transition>
@@ -151,224 +278,4 @@ export default function Example() {
   )
 }
 
-function EditInactiveIcon(props) {
-  return (
-    <svg
-      {...props}
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M4 13V16H7L16 7L13 4L4 13Z"
-        fill="#fff"
-        stroke="#A78BFA"
-        strokeWidth="2"
-      />
-    </svg>
-  )
-}
 
-function EditActiveIcon(props) {
-  return (
-    <svg
-      {...props}
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M4 13V16H7L16 7L13 4L4 13Z"
-        fill="#8B5CF6"
-        stroke="#C4B5FD"
-        strokeWidth="2"
-      />
-    </svg>
-  )
-}
-
-function DuplicateInactiveIcon(props) {
-  return (
-    <svg
-      {...props}
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M4 4H12V12H4V4Z"
-        fill="#fff"
-        stroke="#fa988b"
-        strokeWidth="2"
-      />
-      <path
-        d="M8 8H16V16H8V8Z"
-        fill="#fff"
-        stroke="#fa988b"
-        strokeWidth="2"
-      />
-    </svg>
-  )
-}
-
-function DuplicateActiveIcon(props) {
-  return (
-    <svg
-      {...props}
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M4 4H12V12H4V4Z"
-        fill="#8B5CF6"
-        stroke="#C4B5FD"
-        strokeWidth="2"
-      />
-      <path
-        d="M8 8H16V16H8V8Z"
-        fill="#8B5CF6"
-        stroke="#C4B5FD"
-        strokeWidth="2"
-      />
-    </svg>
-  )
-}
-
-function ArchiveInactiveIcon(props) {
-  return (
-    <svg
-      {...props}
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <rect
-        x="5"
-        y="8"
-        width="10"
-        height="8"
-        fill="#fff"
-        stroke="#A78BFA"
-        strokeWidth="2"
-      />
-      <rect
-        x="4"
-        y="4"
-        width="12"
-        height="4"
-        fill="#fff"
-        stroke="#A78BFA"
-        strokeWidth="2"
-      />
-      <path d="M8 12H12" stroke="#A78BFA" strokeWidth="2" />
-    </svg>
-  )
-}
-
-function ArchiveActiveIcon(props) {
-  return (
-    <svg
-      {...props}
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <rect
-        x="5"
-        y="8"
-        width="10"
-        height="8"
-        fill="#8B5CF6"
-        stroke="#C4B5FD"
-        strokeWidth="2"
-      />
-      <rect
-        x="4"
-        y="4"
-        width="12"
-        height="4"
-        fill="#8B5CF6"
-        stroke="#C4B5FD"
-        strokeWidth="2"
-      />
-      <path d="M8 12H12" stroke="#A78BFA" strokeWidth="2" />
-    </svg>
-  )
-}
-
-function MoveInactiveIcon(props) {
-  return (
-    <svg
-      {...props}
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path d="M10 4H16V10" stroke="#A78BFA" strokeWidth="2" />
-      <path d="M16 4L8 12" stroke="#A78BFA" strokeWidth="2" />
-      <path d="M8 6H4V16H14V12" stroke="#A78BFA" strokeWidth="2" />
-    </svg>
-  )
-}
-
-function MoveActiveIcon(props) {
-  return (
-    <svg
-      {...props}
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path d="M10 4H16V10" stroke="#C4B5FD" strokeWidth="2" />
-      <path d="M16 4L8 12" stroke="#C4B5FD" strokeWidth="2" />
-      <path d="M8 6H4V16H14V12" stroke="#C4B5FD" strokeWidth="2" />
-    </svg>
-  )
-}
-
-function DeleteInactiveIcon(props) {
-  return (
-    <svg
-      {...props}
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <rect
-        x="5"
-        y="6"
-        width="10"
-        height="10"
-        fill="#fff"
-        stroke="#A78BFA"
-        strokeWidth="2"
-      />
-      <path d="M3 6H17" stroke="#A78BFA" strokeWidth="2" />
-      <path d="M8 6V4H12V6" stroke="#A78BFA" strokeWidth="2" />
-    </svg>
-  )
-}
-
-function DeleteActiveIcon(props) {
-  return (
-    <svg
-      {...props}
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <rect
-        x="5"
-        y="6"
-        width="10"
-        height="10"
-        fill="#8B5CF6"
-        stroke="#C4B5FD"
-        strokeWidth="2"
-      />
-      <path d="M3 6H17" stroke="#C4B5FD" strokeWidth="2" />
-      <path d="M8 6V4H12V6" stroke="#C4B5FD" strokeWidth="2" />
-    </svg>
-  )
-}
