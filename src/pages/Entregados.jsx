@@ -120,7 +120,7 @@ const Entregados = () => {
         },
         
         {
-            name: <Encabezado>notas</Encabezado>,
+            name: <Encabezado>Notas</Encabezado>,
             selector: row => row.notas,
             sortable: false,
             grow: 2,

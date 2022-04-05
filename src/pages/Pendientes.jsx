@@ -95,6 +95,8 @@ const Pendientes = () => {
     }, [])
 
 
+  
+
     
 
 
@@ -105,14 +107,16 @@ const Pendientes = () => {
             selector: row => row.documento,
             cell: row => <Boton  onClick={() => navigate(`/despachos/${row.id}`)}>{row.documento}</Boton>,
             sortable: true,
+            order: true,
             grow: 0,
-            wrap: true
+            wrap: true,
+            direction: 'desc'
 
         },
         {
             name: <Encabezado>Cliente</Encabezado>,
             selector: row => <p className=' font-bold text-black-900 uppercase'>{row.nombre}</p>,
-            sortable: true,
+            
             wrap: true
 
         },
@@ -167,7 +171,7 @@ const Pendientes = () => {
                 <FontAwesomeIcon className="ml-2" icon={faEnvelope} /> 
                 </button>,
             ///////////////////////////////////////////////////////
-            sortable: true,
+            sortable: false,
             grow: 0,
             wrap: true,
             right: true,
@@ -272,6 +276,7 @@ const Pendientes = () => {
                             progressPending={pending}
                             noDataComponent={<p>No se encontro ningún elemento</p>}
                             onSort={handleSort}
+                            
                             
                             
                             

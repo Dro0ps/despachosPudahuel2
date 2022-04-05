@@ -54,7 +54,7 @@ const VerDespacho = ({usuario}) => {
     
     useEffect(() => {
         setCargando(!cargando)
-        const obtenerClienteAPI = async () => {
+        const obtenerClienteAPI = async() => {
             try {
 
                 const ref = doc(db, `despachos/${enlaceID}`);
@@ -223,12 +223,12 @@ const VerDespacho = ({usuario}) => {
                 </p> }
 
                 
-                <div className="mt-6">
+                <div className="mt-6 flex">
                 {/******************Recibido*******************/}
                     {recibido ?
                     <button 
                         className="inline-block text-center mr-4 bg-green-300 border border-green rounded-md
-                         py-3 px-8 font-medium text-black"
+                         py-2 px-4 font-medium text-black"
                          value={recibido}
                     >Preparando</button>
 
@@ -236,7 +236,7 @@ const VerDespacho = ({usuario}) => {
 
                     <button 
                         className="inline-block text-center mr-4 bg-white-700 border border-green rounded-md
-                         py-3 px-8 font-medium text-black hover:bg-green-300"
+                         py-2 px-4 font-medium text-black hover:bg-green-300"
                         name="recibido"
                         value={recibido}
                         onClick={estadoRecibido}
@@ -247,7 +247,7 @@ const VerDespacho = ({usuario}) => {
                     {despachado ?
                     <button 
                         className="inline-block text-center mr-4 bg-green-300 border border-green rounded-md
-                        py-3 px-8 font-medium text-black"
+                        py-2 px-4 font-medium text-black"
                         value={despachado}
                     >Despachado</button>
 
@@ -257,7 +257,7 @@ const VerDespacho = ({usuario}) => {
                         { recibido ?
                             <button 
                                 className="inline-block text-center mr-4 bg-white-700 border border-green rounded-md
-                                py-3 px-8 font-medium text-black hover:bg-green-300"
+                                py-2 px-4 font-medium text-black hover:bg-green-300"
                                 name="despachado"
                                 onClick={estadoDespachado}
                                 value={despachado}
@@ -267,7 +267,7 @@ const VerDespacho = ({usuario}) => {
 
                             <button 
                                 className="inline-block text-center mr-4 bg-white-700 border border-green rounded-md
-                                py-3 px-8 font-medium text-black "
+                                py-2 px-4 font-medium text-black "
                                 name="despachado"
                                 onClick={alertaDespacho}
                                 value={despachado}
@@ -284,7 +284,7 @@ const VerDespacho = ({usuario}) => {
                 {entregado ?
                     <button 
                         className="inline-block text-center mr-4 bg-green-300 border border-green rounded-md
-                        py-3 px-8 font-medium text-black"
+                        py-2 px-4 font-medium text-black"
                         value={entregado}
                     >Entregado</button>
 
@@ -294,7 +294,7 @@ const VerDespacho = ({usuario}) => {
                         { despachado ?
                             <button 
                                 className="inline-block text-center mr-4 bg-white-700 border border-green rounded-md
-                                py-3 px-8 font-medium text-black hover:bg-green-300"
+                                py-2 px-4 font-medium text-black hover:bg-green-300"
                                 name="entregado"
                                 onClick={estadoEntregado}
                                 value={entregado}
@@ -304,7 +304,7 @@ const VerDespacho = ({usuario}) => {
 
                             <button 
                                 className="inline-block text-center mr-4 bg-white-700 border border-green rounded-md
-                                py-3 px-8 font-medium text-black "
+                                py-2 px-4 font-medium text-black "
                                 name="entregado"
                                 onClick={alertaEntregado}
                                 value={entregado}
@@ -321,7 +321,7 @@ const VerDespacho = ({usuario}) => {
                 {confirmado ?
                     <button 
                         className="inline-block text-center mr-4 bg-green-300 border border-green rounded-md
-                        py-3 px-8 font-medium text-black"
+                        py-2 px-4 font-medium text-black"
                         value={confirmado}
                     >Confirmado</button>
 
@@ -332,7 +332,7 @@ const VerDespacho = ({usuario}) => {
                     {despachado ?
                         <button 
                             className="inline-block text-center mr-4 bg-white-700 border border-green rounded-md
-                            py-3 px-8 font-medium text-black hover:bg-green-300"
+                            py-2 px-4 font-medium text-black hover:bg-green-300"
                             name="confirmado"
                             value={confirmado}
                             onClick={estadoConfirmado}
@@ -342,7 +342,7 @@ const VerDespacho = ({usuario}) => {
                         
                         <button 
                             className="inline-block text-center mr-4 bg-white-700 border border-green rounded-md
-                            py-3 px-8 font-medium text-black "
+                            py-2 px-4 font-medium text-black "
                             name="confirmado"
                             value={confirmado}
                             onClick={alertaConfirmado}
