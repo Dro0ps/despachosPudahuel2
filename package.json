@@ -13,6 +13,7 @@
     "@headlessui/react": "^1.4.2",
     "@heroicons/react": "^1.0.5",
     "autoprefixer": "^10.4.0",
+    "axios": "^0.27.2",
     "dotenv": "^10.0.0",
     "firebase": "^9.6.1",
     "formik": "^2.2.9",

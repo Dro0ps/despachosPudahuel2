@@ -33,7 +33,7 @@ const VerDespacho = ({usuario}) => {
     const {id: enlaceID} = useParams();
 
     
-    //////////////Escucha del servidor////////////////
+    //////////////Escucha del Servidor////////////////
 
     const {
         creador,

@@ -17,6 +17,8 @@ import Pendientes from './pages/Pendientes';
 import Despachados from './pages/Despachados';
 import Confirmados from './pages/Confirmados';
 import Entregados from './pages/Entregados';
+import Productos from './pages/Productos';
+import VistaProducto from './components/VistaProducto';
 
 
 
@@ -114,10 +116,12 @@ function App() {
               <Route path="nuevo" element={<NuevoDespacho usuario={user}/>}/>
               <Route path="listado" element={<Listado usuario={user}/>}/>
               <Route path="despachados" element={<Despachados/>}/>
+              <Route path="productos" element={<Productos usuario={user}/>}/>
               <Route path="entregados" element={<Entregados/>}/>
               <Route path="confirmados" element={<Confirmados/>}/>
               <Route path="editar/:id" element={<EditarDespacho/>}/>
               <Route path=":id" element={<VerDespacho usuario={user} />}/>
+              <Route path="productos/:id" element={<VistaProducto/>}/>
             </Route>
           
           </>
