@@ -285,7 +285,7 @@ const Confirmados = () => {
 
     return (
         <>
-            <h1 className='font-extrabold max-h-full  text-4xl flex justify-center text-orange-700 mb-12 mt-4'>Listado de Confirmados</h1>
+            <h1 className='font-extrabold max-h-full  text-4xl flex justify-center text-orange-700 mb-20 mt-4'>Confirmados</h1>
 
             <Tabla />
         </>

@@ -3,7 +3,7 @@ import { Fragment } from 'react'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Link } from "react-router-dom"
-import { faBars, faBoxes, faClipboardCheck, faClipboardList, faDoorOpen, faHourglassHalf, faPlus, faTruck } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faBoxArchive, faBoxes, faClipboardCheck, faClipboardList, faDoorOpen, faFolderOpen, faHourglassHalf, faPlus, faTruck } from '@fortawesome/free-solid-svg-icons'
 import Swal from 'sweetalert2'
 import db from '../firebase/credenciales'
 import { getAuth, signOut } from "firebase/auth";
@@ -235,6 +235,36 @@ export default function Example() {
                       />
                     )}
                     Listado
+                  </Link>
+                )}
+              </Menu.Item>
+
+
+            {/* ********** Productos  ********* */}
+
+            <Menu.Item>
+                {({ active }) => (
+                  <Link
+                    to='/despachos/productos'
+                    className={`${
+                      active ? 'bg-orange-500 text-white font-semibold' : 'text-orange-900'
+                    } group flex rounded-md items-center font-semibold w-full px-2 py-2 text-sm`}
+                  >
+                    {active ? (
+                      
+                      <FontAwesomeIcon
+                        className="w-5 h-5 mr-2 text-white"
+                        aria-hidden="true"
+                        icon={ faBoxArchive}
+                      />
+                    ) : (
+                      <FontAwesomeIcon
+                        className="w-5 h-5 mr-2 text-orange-400"
+                        aria-hidden="true"
+                        icon={faBoxArchive}
+                      />
+                    )}
+                    Productos
                   </Link>
                 )}
               </Menu.Item>

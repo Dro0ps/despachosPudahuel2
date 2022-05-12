@@ -22,7 +22,7 @@ const nuevoClienteSchema = Yup.object().shape({
   categoria: Yup.string().required("Todos los datos son obligatorios"),
 });
 
-const FormularioProducto = ({setFormulario}) => {
+const FormularioProducto = ({ setFormulario, formSubmit, formulario }) => {
   const [spiner, setSpiner] = useState(false);
 
   const navigate = useNavigate();
@@ -65,32 +65,43 @@ const FormularioProducto = ({setFormulario}) => {
       } else {
         await addDoc(collection(db, "productos"), valores);
         Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'Guardado Correctamente',
-            showConfirmButton: false,
-            timer: 3000
-          })
+          position: "center",
+          icon: "success",
+          title: "Guardado Correctamente",
+          showConfirmButton: false,
+          timer: 3000,
+        });
       }
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
 
     setSpiner(false);
     setFormulario(false);
-    
   };
 
   return (
     <>
-      <div className="bg-white mt-10 px-5 py-10 rounded-md shadow-md md:w-3/4 mx-auto">
+      <div className="flex flex-col justify-center bg-white mt-10 px-5 py-10 rounded-md shadow-md md:w-3/4 mx-auto">
+        <div className="flex justify-between">
+          <p className="uppercase font-bold text-gray-500">Registro de productos</p>
+          <button
+            className="  font-serif  text-orange-500 rounded max-w-xs   transition-colors  hover:text-orange-700"
+            type="submit"
+            onClick={formSubmit}
+          >
+            {formulario ? "Volver al Listado" : "Agregar Nuevo"}
+          </button>
+        </div>
+
         <Formik
           initialValues={{
             creado: +new Date(),
             cod_interno: "",
             nombre_producto: "",
             categoria: "",
-            imagen: urlImagen ?? '',
+            imagen: urlImagen ?? "",
+            estado: 'Disponible'
           }}
           enableReinitialize={true} // props muy util para formulario en conjunto con defaultProps
           onSubmit={async (values, { resetForm }) => {

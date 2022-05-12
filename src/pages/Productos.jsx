@@ -51,8 +51,6 @@ const firestore = getFirestore(firebaseApp);
 const Productos = ({ usuario }) => {
   const [formulario, setFormulario] = useState(false);
 
-  
-
   const formSubmit = () => {
     setFormulario(!formulario);
   };
@@ -70,8 +68,6 @@ const Productos = ({ usuario }) => {
         //Como llamar documentos y listarlos en Firebase IMPORTANTE
         const q = query(collection(firestore, "productos"));
         const querySnapshot = await getDocs(q);
-
-       
 
         const resultado = [];
 
@@ -134,7 +130,7 @@ const Productos = ({ usuario }) => {
       name: <Encabezado>Codigo</Encabezado>,
       selector: (row) => row.cod_interno,
       cell: (row) => (
-        <Boton onClick={() => navigate(`/productos/${row.id}`)}>
+        <Boton onClick={() => navigate(`/despachos/productos/${row.id}`)}>
           {row.cod_interno}
         </Boton>
       ),
@@ -144,10 +140,11 @@ const Productos = ({ usuario }) => {
     },
     {
       name: <Encabezado>Nombre del Producto</Encabezado>,
-      selector: (row) => (
-        <p className=" font-bold text-black-900 uppercase">
+      selector: (row) => row.nombre_producto,
+      cell: (row) => (
+        <Boton onClick={() => navigate(`/despachos/productos/${row.id}`)}>
           {row.nombre_producto}
-        </p>
+        </Boton>
       ),
       sortable: true,
       grow: 3,
@@ -156,6 +153,13 @@ const Productos = ({ usuario }) => {
     {
       name: <Encabezado>Categoria</Encabezado>,
       selector: (row) => row.categoria,
+      sortable: false,
+      grow: 1,
+      wrap: true,
+    },
+    {
+      name: <Encabezado>Estado</Encabezado>,
+      selector: (row) => row.estado,
       sortable: false,
       grow: 1,
       wrap: true,
@@ -201,6 +205,11 @@ const Productos = ({ usuario }) => {
             .normalize("NFD")
             .replace(/[\u0300-\u036f]/g, "")
             .includes(this.state.busqueda) ||
+          item.estado
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .includes(this.state.busqueda) ||
           item.categoria
             .toLowerCase()
             .normalize("NFD")
@@ -220,28 +229,44 @@ const Productos = ({ usuario }) => {
     render() {
       return (
         <>
-          <button type="submit" onClick={formSubmit}>
-            {formulario ? "Listado de Productos" : "Agregar Productos"}
-          </button>
-
           {formulario ? (
-            <FormularioProducto setFormulario={setFormulario} />
+            <>
+              <FormularioProducto
+                setFormulario={setFormulario}
+                formSubmit={formSubmit}
+                formulario={formulario}
+              />
+            </>
           ) : (
             <>
-              <Encabezado>Filtrar resultados</Encabezado>
-              <input
-                type="text"
-                placeholder="Buscar"
-                className=" sm:flex items-center w-72 text-left space-x-3 px-4 h-12 
+              <div className="flex justify-between">
+                <div className="flex">
+                  <button
+                    className="  font-semibold shadow text-orange-600 rounded px-3 my-6   bg-gray-200 transition-colors hover:bg-orange-700 hover:text-white"
+                    type="submit"
+                    onClick={formSubmit}
+                  >
+                    {formulario ? "Listado de Productos" : "Agregar Nuevo"}
+                  </button>
+                </div>
+
+                <div>
+                  <Encabezado>Filtrar resultados</Encabezado>
+                  <input
+                    type="text"
+                    placeholder="Buscar"
+                    className=" sm:flex items-center w-72 text-left space-x-3 px-4 h-12 
                                 bg-white ring-1 ring-slate-900/10 hover:ring-slate-300 
                                 focus:outline-none focus:ring-2 focus:ring-sky-500 
                                 shadow-sm rounded-lg text-slate-400 dark:bg-slate-800 
                                 dark:ring-0 dark:text-slate-300 dark:highlight-white/5 
                                 dark:hover:bg-slate-700 mb-5"
-                name="busqueda"
-                value={this.state.busqueda}
-                onChange={this.onChange}
-              />
+                    name="busqueda"
+                    value={this.state.busqueda}
+                    onChange={this.onChange}
+                  />
+                </div>
+              </div>
 
               <DataTable
                 expandibleRows
@@ -266,8 +291,8 @@ const Productos = ({ usuario }) => {
 
   return (
     <>
-      <h1 className="font-extrabold max-h-full  text-4xl flex justify-center text-orange-700 mb-12 mt-4">
-        Listado de Productos
+      <h1 className="font-extrabold max-h-full  text-4xl flex justify-center text-orange-700 mb-20 mt-4">
+        Productos
       </h1>
 
       <Tabla />
