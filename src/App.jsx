@@ -34,55 +34,73 @@ function App() {
 
   /* console.log(import.meta.env); */
 
-  const [usuarioGlobal, setUsuarioGlobal] = useState(true);
+  const [usuarioGlobal, setUsuarioGlobal] = useState(false);
   const [ user, setUser ] = useState(null);
+  const [ loading, setLoading ] = useState(true);
   
 
 
   const obtenerUser = async(uid) => {
-    const docuRef = doc(firestore, `usuarios/${uid}`);
-    const docuCifrada = await getDoc(docuRef);
-    const infoUser = docuCifrada.data();
-    return infoUser;
+    try {
+      const docuRef = doc(firestore, `usuarios/${uid}`);
+      const docuCifrada = await getDoc(docuRef);
+      const infoUser = docuCifrada.data();
+      return infoUser;
+    } catch (error) {
+      console.error('Error obteniendo usuario:', error);
+      return null;
+    }
   }
 
   const setUserWithFirebaseAndRolAndName = async(usuarioFirebase) => {
-    await obtenerUser(usuarioFirebase.uid).then((usuario) => {
-      const userData = {
-        uid: usuarioFirebase.uid,
-        email: usuarioFirebase.email,
-        rol: usuario.rol,
-        nombre: usuario.nombre
-      };
-      setUser(userData);
-    })
+    try {
+      const usuario = await obtenerUser(usuarioFirebase.uid);
+      if (usuario) {
+        const userData = {
+          uid: usuarioFirebase.uid,
+          email: usuarioFirebase.email,
+          rol: usuario.rol,
+          nombre: usuario.nombre
+        };
+        setUser(userData);
+      }
+    } catch (error) {
+      console.error('Error configurando usuario:', error);
+    }
   }
 
-  obtenerUser()
-  
-
   useEffect(() => {
-    
-    onAuthStateChanged(auth,(usuarioFirebase) => {
-      if (usuarioFirebase) {
-
-        if (!user) {
-           setUserWithFirebaseAndRolAndName(usuarioFirebase);
-        }
-          // Codígo en caso de que haya sesión iniciada
+    const unsubscribe = onAuthStateChanged(auth, async (usuarioFirebase) => {
+      try {
+        if (usuarioFirebase) {
+          await setUserWithFirebaseAndRolAndName(usuarioFirebase);
           setUsuarioGlobal(true);
-      } else {
-          setUser(null)
-          // Codígo en caso de que no haya sesión iniciada
+        } else {
+          setUser(null);
           setUsuarioGlobal(false);
+        }
+      } catch (error) {
+        console.error('Error en autenticación:', error);
+        setUsuarioGlobal(false);
+        setUser(null);
+      } finally {
+        setLoading(false);
       }
-  })
-    
-  }, [])
+    });
 
-  
-  
-  
+    return () => unsubscribe();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-orange-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Cargando...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
