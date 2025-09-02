@@ -4,7 +4,7 @@ import Alerta from './Alerta';
 import { useNavigate } from 'react-router-dom'; // para redireccionar
 import Spinner from './Spinner';
 import firebaseApp from '../firebase/credenciales';
-import { getFirestore, addDoc, collection} from 'firebase/firestore';
+import { getFirestore, addDoc, collection, getDocs } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL} from 'firebase/storage';
 import {useState} from 'react';
 
@@ -43,7 +43,49 @@ const Formulario = ({despacho, cargando, usuario}) => {
         setSpiner(true);
 
         try {
+            // Verificar duplicados exactos y parciales por número de documento
+            const parseTokens = (str) =>
+                String(str || '')
+                .split(/[;,\s]+/)
+                .map(s => s.trim())
+                .filter(Boolean);
+
+            const inputTokens = parseTokens(valores.documento);
+
+            const snapshot = await getDocs(collection(db, "despachos"));
+            for (const docSnap of snapshot.docs) {
+                const storedDoc = String(docSnap.data()?.documento || '');
+
+                // Coincidencia exacta del string completo
+                if (storedDoc === valores.documento) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Documento duplicado',
+                        text: `El documento "${valores.documento}" ya está registrado.`
+                    });
+                    setSpiner(false);
+                    return false;
+                }
+
+                // Coincidencia por tokens parciales
+                const storedTokens = parseTokens(storedDoc);
+                const conflicto = inputTokens.find(t => storedTokens.includes(t));
+                if (conflicto) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Número ya utilizado',
+                        text: `El número "${conflicto}" ya existe dentro del documento registrado: "${storedDoc}".`
+                    });
+                    setSpiner(false);
+                    return false;
+                }
+            }
                 
+            // Asignar timestamp de creación si no existe (evita reinit del form)
+            if (!valores.creado) {
+                valores.creado = +new Date();
+            }
+
 
             if(archivoLocal) {
 
@@ -81,11 +123,14 @@ const Formulario = ({despacho, cargando, usuario}) => {
 
         } catch (error) {
             console.log(error);
+            setSpiner(false);
+            return false;
         }
 
         setSpiner(false);
 
         navigate('/despachos')//Redirecciona al usuario a otra ventana
+        return true;
 
     }
 
@@ -98,7 +143,7 @@ const Formulario = ({despacho, cargando, usuario}) => {
 
             <Formik
                 initialValues={{
-                    creado: +new Date(),
+                    creado: despacho?.creado ?? '',
                     creador: usuario,
                     recibido: despacho?.recibido ?? false,
                     despachado: despacho?.despachado ?? false,
@@ -108,7 +153,7 @@ const Formulario = ({despacho, cargando, usuario}) => {
                     fecha_confirmado: despacho?.fecha_confirmado ?? '',
                     nombre: despacho?.nombre ?? '',
                     direccion: despacho?.direccion ?? '',
-                    tipo_doc: despacho?.documento ?? '',
+                    tipo_doc: despacho?.tipo_doc ?? '',
                     documento: despacho?.documento ?? '',
                     notas: despacho?.notas ?? '',
                     archivo: urlDescarga ?? '',
@@ -117,9 +162,11 @@ const Formulario = ({despacho, cargando, usuario}) => {
                 }}
                 enableReinitialize={true} // props muy util para formulario en conjunto con defaultProps
                 onSubmit={ async (values, {resetForm}) => {
-                    await handleSubmit(values);
-                    // resetForm para reiniciar el formulario
-                    resetForm();
+                    const ok = await handleSubmit(values);
+                    if (ok) {
+                        // resetForm para reiniciar el formulario solo si guardó
+                        resetForm();
+                    }
                 }}
                 validationSchema={nuevoClienteSchema} // LLamamos a la función que validara el formulario 
             >
@@ -166,7 +213,7 @@ const Formulario = ({despacho, cargando, usuario}) => {
                     <div className='mb-4'>
                         <label
                             className='text-gray-800'
-                            htmlFor='documento'
+                            htmlFor='tipo_doc'
                         >Tipo de Documento:</label>
                         <Field
                         as="select"
@@ -179,8 +226,8 @@ const Formulario = ({despacho, cargando, usuario}) => {
                         <option value="guía">Guía</option>
                         <option value="-otro">Otro</option>
                         </Field>
-                        {errors.documento && touched.documento ?
-                            (<Alerta>{errors.documento}</Alerta> )
+                        {errors.tipo_doc && touched.tipo_doc ?
+                            (<Alerta>{errors.tipo_doc}</Alerta> )
                             : null
                         }
                     </div>
